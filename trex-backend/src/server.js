@@ -11,12 +11,20 @@ const { notFound, errorHandler } = require('./middleware/error');
 // Environment
 // --------------------------------------------------
 
-if (!process.env.JWT_SECRET) {
-    process.env.JWT_SECRET = 'dev-only-secret-change-me';
+const isVercel = Boolean(process.env.VERCEL);
 
-    console.warn(
-        'WARNING: JWT_SECRET is not set. Using development secret.'
-    );
+if (!process.env.JWT_SECRET) {
+    if (isVercel) {
+        console.warn(
+            'WARNING: JWT_SECRET is not configured in Vercel environment variables.'
+        );
+    } else {
+        process.env.JWT_SECRET = 'dev-only-secret-change-me';
+
+        console.warn(
+            'WARNING: JWT_SECRET is not set. Using development secret.'
+        );
+    }
 }
 
 // --------------------------------------------------
@@ -29,23 +37,44 @@ const app = express();
 // Paths
 // --------------------------------------------------
 
-// T-REX
-// ├── FRONTEND
-// └── trex-backend
-//     └── src
-//         └── server.js
+/*
+T-REX
+├── FRONTEND
+│   ├── Login
+│   ├── Dashboard
+│   ├── Documents
+│   └── ...
+│
+└── trex-backend
+    └── src
+        └── server.js
+*/
 
-const frontendPath = path.join(
+const frontendPath = path.resolve(
     __dirname,
     '..',
     '..',
     'FRONTEND'
 );
 
-const uploadsPath = path.join(
-    process.cwd(),
-    'uploads'
-);
+/*
+Vercel serverless functions cannot use the deployment
+filesystem as persistent writable storage.
+
+Local:
+    ./uploads
+
+Vercel:
+    /tmp/uploads
+
+IMPORTANT:
+Vercel /tmp storage is temporary and should not be treated
+as permanent document storage.
+*/
+
+const uploadsPath = isVercel
+    ? path.join('/tmp', 'trex-uploads')
+    : path.join(process.cwd(), 'uploads');
 
 // --------------------------------------------------
 // Verify Frontend Directory
@@ -94,10 +123,28 @@ app.use(
 // Upload Directory
 // --------------------------------------------------
 
-if (!fs.existsSync(uploadsPath)) {
-    fs.mkdirSync(uploadsPath, {
-        recursive: true
-    });
+/*
+Only create the directory when necessary.
+
+On Vercel this uses /tmp, which is writable during
+the lifetime of the serverless function.
+*/
+
+try {
+    if (!fs.existsSync(uploadsPath)) {
+        fs.mkdirSync(uploadsPath, {
+            recursive: true
+        });
+    }
+
+    console.log(
+        `Upload directory: ${uploadsPath}`
+    );
+} catch (error) {
+    console.error(
+        'WARNING: Could not initialize upload directory:',
+        error
+    );
 }
 
 // --------------------------------------------------
@@ -105,10 +152,13 @@ if (!fs.existsSync(uploadsPath)) {
 // --------------------------------------------------
 
 app.get('/api/health', (req, res) => {
-    res.json({
+    res.status(200).json({
         success: true,
         service: 'T-REX backend',
         status: 'ok',
+        environment: isVercel
+            ? 'vercel'
+            : 'local',
         time: new Date().toISOString()
     });
 });
@@ -156,35 +206,61 @@ app.use(
 // Uploaded Files
 // --------------------------------------------------
 
-app.use(
-    '/uploads',
-    express.static(uploadsPath)
-);
+if (fs.existsSync(uploadsPath)) {
+    app.use(
+        '/uploads',
+        express.static(uploadsPath)
+    );
+}
 
 // --------------------------------------------------
 // FRONTEND
 // --------------------------------------------------
 
-// Serve the complete FRONTEND folder.
+/*
+Serve the complete FRONTEND directory when it is
+available in the deployment package.
+*/
+
 if (fs.existsSync(frontendPath)) {
+
     app.use(
         express.static(frontendPath)
     );
 
-    // Open the T-REX website at:
-    // http://localhost:5000/
-    //
-    // The current login page is located at:
-    // FRONTEND/Login/Login.html
+    // --------------------------------------------------
+    // Login Page
+    // --------------------------------------------------
 
     app.get('/', (req, res) => {
-        res.sendFile(
-            path.join(
-                frontendPath,
-                'Login',
-                'Login.html'
-            )
+        const loginPath = path.join(
+            frontendPath,
+            'Login',
+            'Login.html'
         );
+
+        if (!fs.existsSync(loginPath)) {
+            return res.status(404).send(
+                'T-REX Login page was not found.'
+            );
+        }
+
+        return res.sendFile(loginPath);
+    });
+
+} else {
+
+    /*
+    If Vercel did not package FRONTEND, return a useful
+    diagnostic instead of crashing the function.
+    */
+
+    app.get('/', (req, res) => {
+        return res.status(500).json({
+            success: false,
+            error: 'FRONTEND directory is not available in the deployment.',
+            frontendPath
+        });
     });
 }
 
@@ -193,18 +269,34 @@ if (fs.existsSync(frontendPath)) {
 // --------------------------------------------------
 
 app.use(notFound);
+
 app.use(errorHandler);
 
 // --------------------------------------------------
-// Start Server
+// Local Server
 // --------------------------------------------------
 
 const PORT = Number(
     process.env.PORT || 5000
 );
 
-if (require.main === module) {
+/*
+Vercel imports this file as a serverless function.
+
+Therefore app.listen() must NOT run on Vercel.
+
+Locally:
+    npm run dev
+    or
+    npm start
+
+will still start the Express server normally.
+*/
+
+if (!isVercel && require.main === module) {
+
     app.listen(PORT, () => {
+
         console.log(
             `T-REX server running on http://localhost:${PORT}`
         );
@@ -216,7 +308,12 @@ if (require.main === module) {
         console.log(
             `T-REX website available at http://localhost:${PORT}/`
         );
+
     });
 }
+
+// --------------------------------------------------
+// Vercel / Express Export
+// --------------------------------------------------
 
 module.exports = app;
