@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "trex-backend/src/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "trex-backend/src/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "trex-backend/src/server.js"
+    }
+  ]
+}

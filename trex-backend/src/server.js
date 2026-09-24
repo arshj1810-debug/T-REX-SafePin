@@ -203,16 +203,20 @@ const PORT = Number(
     process.env.PORT || 5000
 );
 
-app.listen(PORT, () => {
-    console.log(
-        `T-REX server running on http://localhost:${PORT}`
-    );
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(
+            `T-REX server running on http://localhost:${PORT}`
+        );
 
-    console.log(
-        `T-REX API available at http://localhost:${PORT}/api`
-    );
+        console.log(
+            `T-REX API available at http://localhost:${PORT}/api`
+        );
 
-    console.log(
-        `T-REX website available at http://localhost:${PORT}/`
-    );
-});
+        console.log(
+            `T-REX website available at http://localhost:${PORT}/`
+        );
+    });
+}
+
+module.exports = app;

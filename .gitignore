@@ -40,3 +40,4 @@ out/
 
 # Local development files
 *.local
+.vercel
