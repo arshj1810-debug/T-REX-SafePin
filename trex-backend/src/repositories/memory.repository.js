@@ -2,16 +2,26 @@ const crypto = require('crypto');
 
 /*
 |--------------------------------------------------------------------------
-| In-Memory Storage
+| T-REX / SafePin
+| In-Memory Repository
 |--------------------------------------------------------------------------
 |
 | This repository is intentionally database-independent.
 |
-| For the SIH MVP, data is stored in memory.
-| When the database teammate integrates the real database, this file
-| can be replaced/adapted without changing the controllers or routes.
+| It provides the storage interface currently used by the controllers and
+| services. Later, the database implementation can replace this file
+| without requiring changes to the API routes/controllers.
+|
+| IMPORTANT:
+| This storage is temporary.
+| All data is lost when the Node.js process restarts.
 |
 */
+
+
+// --------------------------------------------------------------------------
+// In-Memory Collections
+// --------------------------------------------------------------------------
 
 const users = new Map();
 const cases = new Map();
@@ -19,49 +29,125 @@ const documents = new Map();
 const requests = new Map();
 const notifications = new Map();
 const protections = new Map();
+
 const auditLogs = [];
 
-/*
-|--------------------------------------------------------------------------
-| Utility Functions
-|--------------------------------------------------------------------------
-*/
+
+// --------------------------------------------------------------------------
+// Utility Helpers
+// --------------------------------------------------------------------------
 
 function now() {
     return new Date().toISOString();
 }
 
-function id(prefix) {
-    return `${prefix}_${crypto.randomUUID()}`;
+
+/**
+ * Generate a unique application ID.
+ *
+ * Example:
+ * usr_6d4...
+ * req_...
+ * doc_...
+ */
+function id(prefix = 'id') {
+    const safePrefix =
+        String(prefix || 'id')
+            .trim()
+            .replace(/[^a-zA-Z0-9_-]/g, '');
+
+    return `${safePrefix || 'id'}_${crypto.randomUUID()}`;
 }
 
+
+/**
+ * Generate a human-readable T-REX case ID.
+ *
+ * Example:
+ * 2026-483921
+ *
+ * crypto.randomInt() is used instead of Math.random()
+ * for stronger uniqueness.
+ */
 function caseId() {
-    return `2026-${Math.floor(
-        100000 + Math.random() * 900000
-    )}`;
+    const year = new Date().getFullYear();
+
+    let generated;
+
+    do {
+        generated =
+            `${year}-${crypto.randomInt(100000, 1000000)}`;
+    } while (cases.has(generated));
+
+    return generated;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Demo User
-|--------------------------------------------------------------------------
-*/
+
+/**
+ * Normalize a value to a trimmed string.
+ */
+function normalizeString(value) {
+    return String(value ?? '').trim();
+}
+
+
+/**
+ * Normalize phone numbers for consistent lookup.
+ *
+ * This repository does not perform full phone validation.
+ * Phone validation/OTP verification belongs to the authentication layer.
+ */
+function normalizePhone(phone) {
+    return normalizeString(phone)
+        .replace(/[^\d+]/g, '');
+}
+
+
+/**
+ * Normalize Aadhaar reference.
+ *
+ * Only the last four digits/reference should ever be stored here.
+ */
+function normalizeAadhaarLast4(value) {
+    return normalizeString(value)
+        .replace(/\D/g, '')
+        .slice(-4);
+}
+
+
+// --------------------------------------------------------------------------
+// Demo User
+// --------------------------------------------------------------------------
 
 function seedUser() {
+    const existing =
+        users.get('usr_demo_001');
+
+    if (existing) {
+        return existing;
+    }
+
+    const timestamp = now();
+
     const user = {
         id: 'usr_demo_001',
+
         name: 'Aditya Kapoor',
+
         email: 'aditya@example.com',
+
         phone: '+91 XXXXX XXXXX',
 
         // Never store the complete Aadhaar number.
         aadhaarLast4: null,
 
         verified: true,
+
         role: 'requester',
 
-        createdAt: now(),
-        updatedAt: now()
+        createdAt: timestamp,
+
+        updatedAt: timestamp
     };
 
     users.set(
@@ -74,81 +160,122 @@ function seedUser() {
 
 seedUser();
 
-/*
-|--------------------------------------------------------------------------
-| User Functions
-|--------------------------------------------------------------------------
-*/
+
+// --------------------------------------------------------------------------
+// User Functions
+// --------------------------------------------------------------------------
 
 function findUserById(userId) {
-    return users.get(userId);
+    const normalizedUserId =
+        normalizeString(userId);
+
+    if (!normalizedUserId) {
+        return null;
+    }
+
+    return users.get(normalizedUserId) || null;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Find User By Phone
-|--------------------------------------------------------------------------
-|
-| Used by OTP authentication.
-|
-*/
 
+/**
+ * Find a user by normalized phone number.
+ */
 function findUserByPhone(phone) {
     const normalizedPhone =
-        String(phone || '').trim();
+        normalizePhone(phone);
 
     if (!normalizedPhone) {
         return null;
     }
 
-    return [
-        ...users.values()
-    ].find(
-        user =>
-            String(user.phone || '').trim() ===
-            normalizedPhone
-    ) || null;
+    for (const user of users.values()) {
+        const userPhone =
+            normalizePhone(user.phone);
+
+        if (
+            userPhone &&
+            userPhone === normalizedPhone
+        ) {
+            return user;
+        }
+    }
+
+    return null;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Create User From Successful OTP Verification
-|--------------------------------------------------------------------------
-|
-| OTP verification proves control of the phone number.
-|
-| The user is created as a verified requester and the returned ID is
-| subsequently placed inside the JWT.
-|
-*/
 
+/**
+ * Create or retrieve a user after successful phone OTP verification.
+ *
+ * IMPORTANT:
+ * OTP verification establishes control of the phone number.
+ * It does not by itself establish Aadhaar identity or authority
+ * over a deceased person's services.
+ */
 function findOrCreatePhoneUser({
     phone,
     userId = null
-}) {
+} = {}) {
     const normalizedPhone =
-        String(phone || '').trim();
+        normalizePhone(phone);
 
     if (!normalizedPhone) {
         throw Object.assign(
-            new Error('Phone number is required.'),
-            { status: 400 }
+            new Error(
+                'Phone number is required.'
+            ),
+            {
+                status: 400
+            }
         );
     }
 
+
     /*
-     * If auth.service already has a user ID and that user exists,
-     * update the phone information and return that user.
-     */
-    if (userId) {
+    |--------------------------------------------------------------------------
+    | Existing authenticated/application user
+    |--------------------------------------------------------------------------
+    |
+    | Only use userId when the supplied user actually exists.
+    |
+    */
+    const normalizedUserId =
+        normalizeString(userId);
+
+    if (normalizedUserId) {
         const existingById =
-            users.get(userId);
+            users.get(normalizedUserId);
 
         if (existingById) {
+            /*
+             * Do not silently overwrite a different user's phone number.
+             *
+             * If this phone is already attached to another account,
+             * reject the association rather than creating an account
+             * collision.
+             */
+            const phoneOwner =
+                findUserByPhone(normalizedPhone);
+
+            if (
+                phoneOwner &&
+                phoneOwner.id !== existingById.id
+            ) {
+                throw Object.assign(
+                    new Error(
+                        'This phone number is already associated with another account.'
+                    ),
+                    {
+                        status: 409
+                    }
+                );
+            }
+
             existingById.phone =
                 normalizedPhone;
 
-            existingById.verified = true;
+            existingById.verified =
+                true;
 
             existingById.updatedAt =
                 now();
@@ -157,28 +284,36 @@ function findOrCreatePhoneUser({
         }
     }
 
+
     /*
-     * Otherwise find an existing account by phone.
-     */
-    let user =
-        findUserByPhone(
-            normalizedPhone
-        );
+    |--------------------------------------------------------------------------
+    | Existing user by phone
+    |--------------------------------------------------------------------------
+    */
 
-    if (user) {
-        user.verified = true;
+    const existingByPhone =
+        findUserByPhone(normalizedPhone);
 
-        user.updatedAt =
+    if (existingByPhone) {
+        existingByPhone.verified =
+            true;
+
+        existingByPhone.updatedAt =
             now();
 
-        return user;
+        return existingByPhone;
     }
 
+
     /*
-     * No existing account:
-     * create a new verified requester.
-     */
-    user = {
+    |--------------------------------------------------------------------------
+    | Create new verified requester
+    |--------------------------------------------------------------------------
+    */
+
+    const timestamp = now();
+
+    const user = {
         id: id('usr'),
 
         name: 'Verified Requester',
@@ -187,15 +322,16 @@ function findOrCreatePhoneUser({
 
         phone: normalizedPhone,
 
-        // OTP login does not itself establish Aadhaar identity.
+        // OTP verification does not establish Aadhaar identity.
         aadhaarLast4: null,
 
         verified: true,
+
         role: 'requester',
 
-        createdAt: now(),
+        createdAt: timestamp,
 
-        updatedAt: now()
+        updatedAt: timestamp
     };
 
     users.set(
@@ -203,9 +339,13 @@ function findOrCreatePhoneUser({
         user
     );
 
+
     /*
-     * Record the authentication event.
-     */
+    |--------------------------------------------------------------------------
+    | Authentication Audit
+    |--------------------------------------------------------------------------
+    */
+
     addAudit({
         userId: user.id,
 
@@ -219,76 +359,112 @@ function findOrCreatePhoneUser({
     return user;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Existing Aadhaar-Based User Function
-|--------------------------------------------------------------------------
-|
-| Kept intact for the existing T-REX workflow.
-|
-*/
 
+/**
+ * Existing Aadhaar-reference based user creation.
+ *
+ * Only the last four digits/reference are stored.
+ *
+ * NOTE:
+ * This function does NOT claim that Aadhaar verification occurred.
+ * Actual identity/authority verification belongs in the verification
+ * workflow.
+ */
 function findOrCreateUser({
     aadhaarLast4
-}) {
+} = {}) {
     const normalizedLast4 =
-        String(aadhaarLast4 || '').trim();
+        normalizeAadhaarLast4(
+            aadhaarLast4
+        );
 
-    if (!normalizedLast4) {
+    if (
+        !normalizedLast4 ||
+        normalizedLast4.length !== 4
+    ) {
         throw Object.assign(
-            new Error('Aadhaar reference is required.'),
-            { status: 400 }
+            new Error(
+                'Aadhaar reference must contain the last four digits.'
+            ),
+            {
+                status: 400
+            }
         );
     }
 
-    let user = [
-        ...users.values()
-    ].find(
-        existingUser =>
-            existingUser.aadhaarLast4 ===
+
+    /*
+    |--------------------------------------------------------------------------
+    | Existing user
+    |--------------------------------------------------------------------------
+    */
+
+    for (const existingUser of users.values()) {
+        if (
+            String(existingUser.aadhaarLast4 || '') ===
             normalizedLast4
-    );
+        ) {
+            existingUser.updatedAt =
+                now();
 
-    if (!user) {
-        user = {
-            id: id('usr'),
-
-            name: 'Verified Requester',
-
-            email: '',
-
-            phone: '',
-
-            aadhaarLast4:
-                normalizedLast4,
-
-            verified: false,
-
-            createdAt: now(),
-
-            updatedAt: now()
-        };
-
-        users.set(
-            user.id,
-            user
-        );
+            return existingUser;
+        }
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Create user
+    |--------------------------------------------------------------------------
+    */
+
+    const timestamp = now();
+
+    const user = {
+        id: id('usr'),
+
+        name: 'Verified Requester',
+
+        email: '',
+
+        phone: '',
+
+        aadhaarLast4:
+            normalizedLast4,
+
+        /*
+         * Storing an Aadhaar reference does NOT mean
+         * Aadhaar identity has been verified.
+         */
+        verified: false,
+
+        role: 'requester',
+
+        createdAt: timestamp,
+
+        updatedAt: timestamp
+    };
+
+    users.set(
+        user.id,
+        user
+    );
 
     return user;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Audit Logs
-|--------------------------------------------------------------------------
-*/
+
+// --------------------------------------------------------------------------
+// Audit Logs
+// --------------------------------------------------------------------------
 
 function addAudit(entry = {}) {
+    const timestamp = now();
+
     const auditEntry = {
         id: id('audit'),
 
-        timestamp: now(),
+        timestamp,
 
         ...entry
     };
@@ -300,22 +476,42 @@ function addAudit(entry = {}) {
     return auditEntry;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Notifications
-|--------------------------------------------------------------------------
-*/
+
+// --------------------------------------------------------------------------
+// Notifications
+// --------------------------------------------------------------------------
 
 function addNotification(
     userId,
     data = {}
 ) {
+    const normalizedUserId =
+        normalizeString(userId);
+
+    if (!normalizedUserId) {
+        throw Object.assign(
+            new Error(
+                'User ID is required to create a notification.'
+            ),
+            {
+                status: 400
+            }
+        );
+    }
+
+    const timestamp = now();
+
     const notification = {
         id: id('ntf'),
 
-        userId,
+        userId:
+            normalizedUserId,
 
-        createdAt: now(),
+        createdAt:
+            timestamp,
+
+        updatedAt:
+            timestamp,
 
         read: false,
 
@@ -330,13 +526,13 @@ function addNotification(
     return notification;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Repository Export
-|--------------------------------------------------------------------------
-*/
+
+// --------------------------------------------------------------------------
+// Repository Export
+// --------------------------------------------------------------------------
 
 module.exports = {
+
     // Storage collections
     users,
     cases,
