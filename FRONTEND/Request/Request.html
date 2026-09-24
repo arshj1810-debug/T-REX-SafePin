@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SafePin | Submit Request</title>
+
+    <link rel="stylesheet"
+          href="Request.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= GOVERNMENT HEADER ================= -->
+
+<header class="gov-header">
+
+    <div class="gov-left">
+
+        <div class="gov-emblem">
+            🇮🇳
+        </div>
+
+        <div>
+            <strong>Government of India</strong>
+            <span>Digital Identity Protection Portal</span>
+        </div>
+
+    </div>
+
+
+    <div class="gov-right">
+
+        <span class="secure-indicator">
+            <i></i>
+            Secure Session
+        </span>
+
+        <span class="session-id"
+              id="sessionId">
+            SESSION: T-REX
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡️
+        </div>
+
+        <div>
+
+            <h2>SafePin</h2>
+
+            <span>
+                Secure Identity Protection
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <nav class="menu">
+
+
+        <div class="menu-item"
+             onclick="goDashboard()">
+
+            <span>⌂</span>
+
+            Dashboard
+
+        </div>
+
+
+        <div class="menu-item"
+             onclick="goDocuments()">
+
+            <span>▣</span>
+
+            Documents
+
+        </div>
+
+
+        <div class="menu-item active">
+
+            <span>▤</span>
+
+            Requests
+
+        </div>
+
+
+        <div class="menu-item"
+             onclick="goTracking()">
+
+            <span>◷</span>
+
+            Tracking
+
+            <b class="menu-badge"
+               id="trackingBadge">
+                0
+            </b>
+
+        </div>
+
+
+        <div class="menu-item"
+             onclick="goProfile()">
+
+            <span>●</span>
+
+            Profile
+
+        </div>
+
+
+        <div class="menu-item"
+             onclick="goSystem()">
+
+            <span>◈</span>
+
+            System Overview
+
+        </div>
+
+
+    </nav>
+
+
+
+    <div class="sidebar-bottom">
+
+
+        <div class="secure-box">
+
+            <span class="green-dot"></span>
+
+            <div>
+
+                <strong>
+                    System Secure
+                </strong>
+
+                <small>
+                    All services operational
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="menu-item logout"
+             onclick="logout()">
+
+            <span>↪</span>
+
+            Logout
+
+        </div>
+
+
+    </div>
+
+</aside>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+
+        <div class="page-title">
+
+            <div class="breadcrumb">
+
+                SafePin
+
+                <span>/</span>
+
+                Requests
+
+                <span>/</span>
+
+                New Request
+
+            </div>
+
+
+            <h1>
+                Submit Protection Request
+            </h1>
+
+
+            <p>
+                Submit a secure request for a verified document or linked service.
+            </p>
+
+        </div>
+
+
+
+        <div class="top-right">
+
+
+            <div class="live">
+
+                <span></span>
+
+                SYSTEM LIVE
+
+            </div>
+
+
+            <div class="notification">
+
+                🔔
+
+                <b id="notificationBadge">
+                    0
+                </b>
+
+            </div>
+
+
+            <div class="user">
+
+                <div class="avatar"
+                     id="requestProfileAvatar">
+                    TR
+                </div>
+
+                <div>
+
+                    <strong id="requestProfileName">
+                        Loading...
+                    </strong>
+
+                    <small id="requestProfileRole">
+                        Verified Requester
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= PROGRESS ================= -->
+
+    <section class="request-progress">
+
+
+        <div class="progress-step active">
+
+            <span>1</span>
+
+            <div>
+
+                <strong>
+                    Request Details
+                </strong>
+
+                <small>
+                    Select service and action
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="progress-line"></div>
+
+
+        <div class="progress-step">
+
+            <span>2</span>
+
+            <div>
+
+                <strong>
+                    Verification
+                </strong>
+
+                <small>
+                    Secure review
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="progress-line"></div>
+
+
+        <div class="progress-step">
+
+            <span>3</span>
+
+            <div>
+
+                <strong>
+                    Submitted
+                </strong>
+
+                <small>
+                    Receive case ID
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= FORM ================= -->
+
+    <section id="requestForm"
+             class="request-layout">
+
+
+        <!-- LEFT -->
+
+        <div class="form-column">
+
+
+            <!-- DOCUMENT -->
+
+            <div class="form-card">
+
+
+                <div class="card-heading">
+
+                    <div class="heading-icon">
+                        📄
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Select Document or Service
+                        </h2>
+
+                        <p>
+                            Choose the record for which you want to submit a request.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <label for="documentSelect">
+                    Document / Service
+                </label>
+
+
+                <select id="documentSelect">
+
+                    <option value="">
+                        Select a document or service
+                    </option>
+
+                    <option value="Aadhaar Card">
+                        Aadhaar Card
+                    </option>
+
+                    <option value="PAN Card">
+                        PAN Card
+                    </option>
+
+                    <option value="Bank Account">
+                        Bank Account
+                    </option>
+
+                    <option value="Mobile Connection">
+                        Mobile Connection
+                    </option>
+
+                    <option value="Insurance Policy">
+                        Insurance Policy
+                    </option>
+
+                    <option value="Vehicle Registration">
+                        Vehicle Registration
+                    </option>
+
+                    <option value="General Query">
+                        General Query
+                    </option>
+
+                    <option value="General Document Update">
+                        General Document Update
+                    </option>
+
+                </select>
+
+
+                <div class="field-help">
+
+                    <span>ⓘ</span>
+
+                    Only verified records linked to the current identity can be processed.
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ACTION -->
+
+            <div class="form-card">
+
+
+                <div class="card-heading">
+
+                    <div class="heading-icon">
+                        ⚙️
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Choose Required Action
+                        </h2>
+
+                        <p>
+                            Select what you want SafePin to initiate.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="action-grid">
+
+
+                    <div class="action-option"
+                         onclick="selectAction(this, 'Deactivate')">
+
+                        <div class="action-icon">
+                            🔒
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Protection / Deactivation
+                            </strong>
+
+                            <p>
+                                Initiate secure protection processing for the selected service.
+                            </p>
+
+                        </div>
+
+                        <span class="radio"></span>
+
+                    </div>
+
+
+
+                    <div class="action-option"
+                         onclick="selectAction(this, 'Freeze')">
+
+                        <div class="action-icon">
+                            ❄️
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Freeze / Hold
+                            </strong>
+
+                            <p>
+                                Request a temporary security hold where applicable.
+                            </p>
+
+                        </div>
+
+                        <span class="radio"></span>
+
+                    </div>
+
+
+
+                    <div class="action-option"
+                         onclick="selectAction(this, 'Update')">
+
+                        <div class="action-icon">
+                            ✏️
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Update Details
+                            </strong>
+
+                            <p>
+                                Request correction or update of record information.
+                            </p>
+
+                        </div>
+
+                        <span class="radio"></span>
+
+                    </div>
+
+
+
+                    <div class="action-option"
+                         onclick="selectAction(this, 'Other')">
+
+                        <div class="action-icon">
+                            ❓
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Other / Query
+                            </strong>
+
+                            <p>
+                                Raise another issue or request clarification.
+                            </p>
+
+                        </div>
+
+                        <span class="radio"></span>
+
+                    </div>
+
+
+                </div>
+
+
+                <input type="hidden"
+                       id="selectedAction"
+                       value="">
+
+
+            </div>
+
+
+
+            <!-- REASON -->
+
+            <div class="form-card">
+
+
+                <div class="card-heading">
+
+                    <div class="heading-icon">
+                        📝
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Request Reason
+                        </h2>
+
+                        <p>
+                            Provide details that will help the reviewing authority process the request.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <textarea
+                    id="reason"
+                    maxlength="500"
+                    placeholder="Enter the reason for this request..."></textarea>
+
+
+                <div class="textarea-footer">
+
+                    <span>
+                        Keep the information clear and relevant.
+                    </span>
+
+                    <strong>
+                        <span id="characterCount">0</span>
+                        / 500
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- FILE -->
+
+            <div class="form-card">
+
+
+                <div class="card-heading">
+
+                    <div class="heading-icon">
+                        📎
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Supporting Document
+                        </h2>
+
+                        <p>
+                            Upload supporting evidence if required.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <label class="upload-box"
+                       for="supportingFile">
+
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+
+                    <strong>
+                        Click to upload supporting document
+                    </strong>
+
+
+                    <span>
+                        PDF, JPG or PNG • Maximum 5 MB
+                    </span>
+
+
+                    <input
+                        type="file"
+                        id="supportingFile"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onchange="showFile()">
+
+
+                </label>
+
+
+                <div id="fileName"
+                     class="file-name hidden">
+                </div>
+
+
+            </div>
+
+
+
+            <!-- SECURITY NOTE -->
+
+            <div class="security-note">
+
+                <div class="security-icon">
+                    🔐
+                </div>
+
+                <div>
+
+                    <strong>
+                        Secure Request Processing
+                    </strong>
+
+                    <p>
+                        Your request will be assigned a unique case ID and processed through the SafePin verification workflow.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <button class="submit-button"
+                    onclick="submitRequest()">
+
+                Submit Secure Request
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- RIGHT SUMMARY -->
+
+        <aside class="summary-column">
+
+
+            <div class="summary-card">
+
+
+                <div class="summary-heading">
+
+                    <div class="summary-icon">
+                        🛡️
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Request Summary
+                        </h2>
+
+                        <span>
+                            Review before submission
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="summary-status">
+
+                    <span></span>
+
+                    Ready for Submission
+
+                </div>
+
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Selected Service
+                    </span>
+
+                    <strong id="summaryDocument">
+                        Not selected
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Requested Action
+                    </span>
+
+                    <strong id="summaryAction">
+                        Not selected
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Applicant
+                    </span>
+
+                    <strong id="summaryApplicant">
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Identity Status
+                    </span>
+
+                    <strong class="verified-text"
+                            id="summaryIdentityStatus">
+                        Checking...
+                    </strong>
+
+                </div>
+
+
+
+                <div class="summary-divider"></div>
+
+
+
+                <div class="workflow-title">
+                    REQUEST WORKFLOW
+                </div>
+
+
+                <div class="workflow">
+
+
+                    <div class="workflow-item active">
+
+                        <span>
+                            1
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Request Submitted
+                            </strong>
+
+                            <small>
+                                Your request is created.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="workflow-item">
+
+                        <span>
+                            2
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Identity Verification
+                            </strong>
+
+                            <small>
+                                Details are validated.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="workflow-item">
+
+                        <span>
+                            3
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Authority Review
+                            </strong>
+
+                            <small>
+                                Relevant institution processes the request.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="workflow-item">
+
+                        <span>
+                            4
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Status Updated
+                            </strong>
+
+                            <small>
+                                Final action is reflected in tracking.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="summary-security">
+
+                    🔒
+
+                    <span>
+                        Secure audit trail enabled
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="help-card">
+
+                <div>
+                    ❓
+                </div>
+
+                <strong>
+                    Need assistance?
+                </strong>
+
+                <p>
+                    Raise a query if you are unsure which action to select.
+                </p>
+
+                <button onclick="raiseQuery()">
+                    Raise Query
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+    </section>
+
+
+
+    <!-- ================= SUCCESS ================= -->
+
+    <section id="successSection"
+             class="success-section hidden">
+
+
+        <div class="success-card">
+
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <span class="success-label">
+                REQUEST SUBMITTED SUCCESSFULLY
+            </span>
+
+
+            <h1>
+                Your request has been registered
+            </h1>
+
+
+            <p>
+                The request has entered the SafePin verification workflow.
+                Keep the case ID below for tracking.
+            </p>
+
+
+
+            <div class="case-box">
+
+                <span>
+                    SAFE PIN CASE ID
+                </span>
+
+                <strong id="generatedCaseId">
+                    2026-000000
+                </strong>
+
+
+                <button onclick="copyCaseId()">
+                    Copy
+                </button>
+
+            </div>
+
+
+
+            <div class="success-details">
+
+
+                <div>
+
+                    <span>
+                        Document / Service
+                    </span>
+
+                    <strong id="successDocument">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Requested Action
+                    </span>
+
+                    <strong id="successAction">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Initial Status
+                    </span>
+
+                    <strong class="under-verification">
+                        Under Verification
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="next-steps">
+
+
+                <h3>
+                    What happens next?
+                </h3>
+
+
+                <div class="next-step">
+
+                    <span>1</span>
+
+                    <p>
+                        SafePin verifies the submitted request and identity details.
+                    </p>
+
+                </div>
+
+
+                <div class="next-step">
+
+                    <span>2</span>
+
+                    <p>
+                        The request is routed through the appropriate institutional workflow.
+                    </p>
+
+                </div>
+
+
+                <div class="next-step">
+
+                    <span>3</span>
+
+                    <p>
+                        You can monitor the request using the generated Case ID.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="success-actions">
+
+                <button class="primary-success"
+                        onclick="goTracking()">
+
+                    Track Request →
+
+                </button>
+
+
+                <button class="secondary-success"
+                        onclick="goDocuments()">
+
+                    Back to Documents
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script src="Request.js"></script>
+
+</body>
+
+</html>

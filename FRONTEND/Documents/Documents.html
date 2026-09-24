@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SafePin | Protected Documents</title>
+
+    <link rel="stylesheet"
+          href="Documents.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= GOVERNMENT HEADER ================= -->
+
+<header class="gov-header">
+
+    <div class="gov-left">
+
+        <div class="gov-emblem">
+            🇮🇳
+        </div>
+
+        <div>
+            <strong>Government of India</strong>
+            <span>Digital Identity Protection Portal</span>
+        </div>
+
+    </div>
+
+
+    <div class="gov-right">
+
+        <span class="secure-indicator">
+            <i></i>
+            Secure Session
+        </span>
+
+        <span class="session-id">
+            SESSION: SP-2026
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡️
+        </div>
+
+        <div>
+
+            <h2>SafePin</h2>
+
+            <span>
+                Secure Identity Protection
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="menu">
+
+
+        <div class="menu-item"
+             onclick="goDashboard()">
+
+            <span>⌂</span>
+
+            Dashboard
+
+        </div>
+
+
+
+        <div class="menu-item active">
+
+            <span>▣</span>
+
+            Documents
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="goTracking()">
+
+            <span>▤</span>
+
+            Requests
+
+            <b class="menu-badge">
+                0
+            </b>
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="showNotifications()">
+
+            <span>🔔</span>
+
+            Notifications
+
+            <b class="menu-badge">
+                0
+            </b>
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="goProfile()">
+
+            <span>●</span>
+
+            Profile
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="goSystem()">
+
+            <span>◈</span>
+
+            System Overview
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="sidebar-bottom">
+
+
+        <div class="secure-box">
+
+            <span class="green-dot"></span>
+
+            <div>
+
+                <strong>
+                    System Secure
+                </strong>
+
+                <small>
+                    All services operational
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="menu-item logout"
+             onclick="logout()">
+
+            <span>↪</span>
+
+            Logout
+
+        </div>
+
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+
+        <div class="page-title">
+
+            <div class="breadcrumb">
+
+                SafePin
+
+                <span>/</span>
+
+                Documents
+
+            </div>
+
+            <h1>
+                Protected Documents
+            </h1>
+
+            <p>
+                View and manage services associated with the verified identity.
+            </p>
+
+        </div>
+
+
+
+        <div class="top-right">
+
+
+            <div class="live">
+
+                <span></span>
+
+                SYSTEM LIVE
+
+            </div>
+
+
+
+            <button class="notification"
+                    onclick="showNotifications()">
+
+                🔔
+
+                <b id="documentsNotificationCount">
+                    0
+                </b>
+
+            </button>
+
+
+
+            <!-- BACKEND PROFILE -->
+
+            <div class="user">
+
+                <div class="avatar"
+                     id="documentsProfileAvatar">
+
+                    TR
+
+                </div>
+
+                <div>
+
+                    <strong id="documentsProfileName">
+                        Loading...
+                    </strong>
+
+                    <small>
+                        Verified Nominee
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- ================= VERIFICATION BANNER ================= -->
+
+    <section class="verified-banner">
+
+
+        <div class="verified-icon">
+            ✓
+        </div>
+
+
+        <div class="verified-content">
+
+            <strong>
+                Identity Verified Successfully
+            </strong>
+
+            <p>
+                SafePin has verified the identity associated with these protected records.
+            </p>
+
+        </div>
+
+
+        <div class="verified-status">
+
+            <span class="status-dot"></span>
+
+            VERIFIED
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= STATS ================= -->
+
+    <section class="document-stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📁
+            </div>
+
+            <div>
+
+                <span>
+                    Linked Records
+                </span>
+
+                <strong>
+                    00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Verified
+                </span>
+
+                <strong>
+                    00 / 00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <span>
+                    Protected
+                </span>
+
+                <strong>
+                    00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon warning-icon">
+                !
+            </div>
+
+            <div>
+
+                <span>
+                    Action Required
+                </span>
+
+                <strong>
+                    00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= DOCUMENT HEADER ================= -->
+
+    <section class="documents-header">
+
+
+        <div>
+
+            <h2>
+                Linked Services & Records
+            </h2>
+
+            <p>
+                Select a record to inspect verification details or initiate a protection request.
+            </p>
+
+        </div>
+
+
+        <div class="document-count">
+
+            <strong>
+                00
+            </strong>
+
+            <span>
+                Protected Records
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= SEARCH / FILTER ================= -->
+
+    <section class="tools-bar">
+
+
+        <div class="search-box">
+
+            <span>
+                🔎
+            </span>
+
+            <input
+                type="text"
+                id="documentSearch"
+                placeholder="Search documents or services..."
+                oninput="filterDocuments()">
+
+        </div>
+
+
+
+        <div class="filter-group">
+
+            <select id="categoryFilter"
+                    onchange="filterDocuments()">
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="government">
+                    Government
+                </option>
+
+                <option value="financial">
+                    Financial
+                </option>
+
+                <option value="telecom">
+                    Telecom
+                </option>
+
+                <option value="insurance">
+                    Insurance
+                </option>
+
+                <option value="transport">
+                    Transport
+                </option>
+
+            </select>
+
+
+
+            <select id="statusFilter"
+                    onchange="filterDocuments()">
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="verified">
+                    Verified
+                </option>
+
+                <option value="active">
+                    Active
+                </option>
+
+                <option value="action">
+                    Action Required
+                </option>
+
+            </select>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= DOCUMENT GRID ================= -->
+
+    <section class="documents-grid"
+             id="documentsGrid">
+
+
+
+        <!-- AADHAAR -->
+
+        <article class="document-card"
+                 data-name="Aadhaar Card"
+                 data-category="government"
+                 data-status="verified">
+
+
+            <div class="card-top">
+
+                <div class="document-icon aadhaar">
+                    🪪
+                </div>
+
+                <span class="status-pill verified-pill">
+                    <i></i>
+                    Verified
+                </span>
+
+            </div>
+
+
+            <div class="card-title">
+
+                <div>
+
+                    <h3>
+                        Aadhaar Card
+                    </h3>
+
+                    <span>
+                        Government Identity
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-number">
+
+                <span>
+                    DOCUMENT NUMBER
+                </span>
+
+                <strong>
+                    XXXX XXXX 7824
+                </strong>
+
+            </div>
+
+
+            <div class="document-info">
+
+                <div>
+
+                    <span>
+                        Verification
+                    </span>
+
+                    <strong class="success-text">
+                        Verified
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Checked
+                    </span>
+
+                    <strong>
+                        18 Sep 2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="protection-bar">
+
+                <div>
+
+                    <span>
+                        Protection Status
+                    </span>
+
+                    <strong>
+                        Secure
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <span style="width:100%"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-actions">
+
+                <button class="details-btn"
+                        onclick="viewDetails('Aadhaar Card')">
+
+                    👁 View Details
+
+                </button>
+
+
+                <button class="action-btn"
+                        onclick="requestAction('Aadhaar Card')">
+
+                    Request Action →
+
+                </button>
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- PAN -->
+
+        <article class="document-card"
+                 data-name="PAN Card"
+                 data-category="government"
+                 data-status="verified">
+
+
+            <div class="card-top">
+
+                <div class="document-icon pan">
+                    💳
+                </div>
+
+                <span class="status-pill verified-pill">
+                    <i></i>
+                    Verified
+                </span>
+
+            </div>
+
+
+            <div class="card-title">
+
+                <div>
+
+                    <h3>
+                        PAN Card
+                    </h3>
+
+                    <span>
+                        Tax Identification
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-number">
+
+                <span>
+                    PAN NUMBER
+                </span>
+
+                <strong>
+                    XXXXX4821K
+                </strong>
+
+            </div>
+
+
+            <div class="document-info">
+
+                <div>
+
+                    <span>
+                        Verification
+                    </span>
+
+                    <strong class="success-text">
+                        Verified
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Checked
+                    </span>
+
+                    <strong>
+                        18 Sep 2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="protection-bar">
+
+                <div>
+
+                    <span>
+                        Protection Status
+                    </span>
+
+                    <strong>
+                        Secure
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <span style="width:100%"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-actions">
+
+                <button class="details-btn"
+                        onclick="viewDetails('PAN Card')">
+
+                    👁 View Details
+
+                </button>
+
+
+                <button class="action-btn"
+                        onclick="requestAction('PAN Card')">
+
+                    Request Action →
+
+                </button>
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- BANK -->
+
+        <article class="document-card"
+                 data-name="Bank Account"
+                 data-category="financial"
+                 data-status="active">
+
+
+            <div class="card-top">
+
+                <div class="document-icon bank">
+                    🏦
+                </div>
+
+                <span class="status-pill active-pill">
+                    <i></i>
+                    Active
+                </span>
+
+            </div>
+
+
+            <div class="card-title">
+
+                <div>
+
+                    <h3>
+                        Bank Account
+                    </h3>
+
+                    <span>
+                        Financial Service
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-number">
+
+                <span>
+                    ACCOUNT NUMBER
+                </span>
+
+                <strong>
+                    XXXX XXXX 4521
+                </strong>
+
+            </div>
+
+
+            <div class="document-info">
+
+                <div>
+
+                    <span>
+                        Verification
+                    </span>
+
+                    <strong class="success-text">
+                        Verified
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Checked
+                    </span>
+
+                    <strong>
+                        17 Sep 2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="protection-bar">
+
+                <div>
+
+                    <span>
+                        Protection Status
+                    </span>
+
+                    <strong>
+                        Secure
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <span style="width:100%"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-actions">
+
+                <button class="details-btn"
+                        onclick="viewDetails('Bank Account')">
+
+                    👁 View Details
+
+                </button>
+
+
+                <button class="action-btn"
+                        onclick="requestAction('Bank Account')">
+
+                    Request Action →
+
+                </button>
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- MOBILE -->
+
+        <article class="document-card"
+                 data-name="Mobile Connection"
+                 data-category="telecom"
+                 data-status="active">
+
+
+            <div class="card-top">
+
+                <div class="document-icon mobile">
+                    📱
+                </div>
+
+                <span class="status-pill active-pill">
+                    <i></i>
+                    Active
+                </span>
+
+            </div>
+
+
+            <div class="card-title">
+
+                <div>
+
+                    <h3>
+                        Mobile Connection
+                    </h3>
+
+                    <span>
+                        Telecom Service
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-number">
+
+                <span>
+                    MOBILE NUMBER
+                </span>
+
+                <strong>
+                    +91 XXXXX 4218
+                </strong>
+
+            </div>
+
+
+            <div class="document-info">
+
+                <div>
+
+                    <span>
+                        Verification
+                    </span>
+
+                    <strong class="success-text">
+                        Verified
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Checked
+                    </span>
+
+                    <strong>
+                        16 Sep 2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="protection-bar">
+
+                <div>
+
+                    <span>
+                        Protection Status
+                    </span>
+
+                    <strong>
+                        Secure
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <span style="width:100%"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-actions">
+
+                <button class="details-btn"
+                        onclick="viewDetails('Mobile Connection')">
+
+                    👁 View Details
+
+                </button>
+
+
+                <button class="action-btn"
+                        onclick="requestAction('Mobile Connection')">
+
+                    Request Action →
+
+                </button>
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- INSURANCE -->
+
+        <article class="document-card"
+                 data-name="Insurance Policy"
+                 data-category="insurance"
+                 data-status="action">
+
+
+            <div class="card-top">
+
+                <div class="document-icon insurance">
+                    🛡️
+                </div>
+
+                <span class="status-pill action-pill">
+                    <i></i>
+                    Action Required
+                </span>
+
+            </div>
+
+
+            <div class="card-title">
+
+                <div>
+
+                    <h3>
+                        Insurance Policy
+                    </h3>
+
+                    <span>
+                        Insurance Service
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-number">
+
+                <span>
+                    POLICY NUMBER
+                </span>
+
+                <strong>
+                    POL-XXXX-2918
+                </strong>
+
+            </div>
+
+
+            <div class="document-info">
+
+                <div>
+
+                    <span>
+                        Verification
+                    </span>
+
+                    <strong class="success-text">
+                        Verified
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Checked
+                    </span>
+
+                    <strong>
+                        15 Sep 2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="protection-bar">
+
+                <div>
+
+                    <span>
+                        Protection Status
+                    </span>
+
+                    <strong class="warning-text">
+                        Review Required
+                    </strong>
+
+                </div>
+
+                <div class="progress warning-progress">
+
+                    <span style="width:72%"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-actions">
+
+                <button class="details-btn"
+                        onclick="viewDetails('Insurance Policy')">
+
+                    👁 View Details
+
+                </button>
+
+
+                <button class="action-btn"
+                        onclick="requestAction('Insurance Policy')">
+
+                    Request Action →
+
+                </button>
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- VEHICLE -->
+
+        <article class="document-card"
+                 data-name="Vehicle Registration"
+                 data-category="transport"
+                 data-status="active">
+
+
+            <div class="card-top">
+
+                <div class="document-icon vehicle">
+                    🚗
+                </div>
+
+                <span class="status-pill active-pill">
+                    <i></i>
+                    Active
+                </span>
+
+            </div>
+
+
+            <div class="card-title">
+
+                <div>
+
+                    <h3>
+                        Vehicle Registration
+                    </h3>
+
+                    <span>
+                        Transport Service
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-number">
+
+                <span>
+                    REGISTRATION
+                </span>
+
+                <strong>
+                    MP XX XX 4521
+                </strong>
+
+            </div>
+
+
+            <div class="document-info">
+
+                <div>
+
+                    <span>
+                        Verification
+                    </span>
+
+                    <strong class="success-text">
+                        Verified
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Checked
+                    </span>
+
+                    <strong>
+                        14 Sep 2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="protection-bar">
+
+                <div>
+
+                    <span>
+                        Protection Status
+                    </span>
+
+                    <strong>
+                        Secure
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <span style="width:100%"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-actions">
+
+                <button class="details-btn"
+                        onclick="viewDetails('Vehicle Registration')">
+
+                    👁 View Details
+
+                </button>
+
+
+                <button class="action-btn"
+                        onclick="requestAction('Vehicle Registration')">
+
+                    Request Action →
+
+                </button>
+
+            </div>
+
+
+        </article>
+
+
+    </section>
+
+
+
+    <!-- NO RESULTS -->
+
+    <div id="noResults"
+         class="no-results">
+
+        <div>
+            🔎
+        </div>
+
+        <h3>
+            No records found
+        </h3>
+
+        <p>
+            Try changing your search or filter.
+        </p>
+
+    </div>
+
+
+
+    <!-- ================= OTHER OPTIONS ================= -->
+
+    <section class="other-section">
+
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Document Services
+                </h2>
+
+                <p>
+                    Additional actions available for your protected records.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="other-grid">
+
+
+            <div class="option-card"
+                 onclick="updateDetails()">
+
+                <div class="option-icon">
+                    ✏️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Update Details
+                    </h3>
+
+                    <p>
+                        Request correction or update of document information.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </div>
+
+
+
+            <div class="option-card"
+                 onclick="raiseQuery()">
+
+                <div class="option-icon">
+                    ❓
+                </div>
+
+                <div>
+
+                    <h3>
+                        Raise a Query
+                    </h3>
+
+                    <p>
+                        Contact the coordination department regarding an issue.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </div>
+
+
+
+            <div class="option-card"
+                 onclick="downloadReport()">
+
+                <div class="option-icon">
+                    📥
+                </div>
+
+                <div>
+
+                    <h3>
+                        Verification Report
+                    </h3>
+
+                    <p>
+                        Generate a summary of linked services and verification.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================= ACTIVITY ================= -->
+
+    <section class="activity-section">
+
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Recent Verification Activity
+                </h2>
+
+                <p>
+                    Latest activity recorded for linked services.
+                </p>
+
+            </div>
+
+
+            <span class="audit-label">
+                AUDIT LOG ACTIVE
+            </span>
+
+        </div>
+
+
+
+        <div class="activity-list">
+
+
+            <div class="activity-item">
+
+                <div class="activity-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Aadhaar verification completed
+                    </strong>
+
+                    <span>
+                        Government Identity • 18 Sep 2026
+                    </span>
+
+                </div>
+
+                <b>
+                    Verified
+                </b>
+
+            </div>
+
+
+
+            <div class="activity-item">
+
+                <div class="activity-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        PAN record verified
+                    </strong>
+
+                    <span>
+                        Tax Identification • 18 Sep 2026
+                    </span>
+
+                </div>
+
+                <b>
+                    Verified
+                </b>
+
+            </div>
+
+
+
+            <div class="activity-item">
+
+                <div class="activity-icon warning">
+                    !
+                </div>
+
+                <div>
+
+                    <strong>
+                        Insurance policy requires review
+                    </strong>
+
+                    <span>
+                        Insurance Service • 15 Sep 2026
+                    </span>
+
+                </div>
+
+                <b class="warning-text">
+                    Review
+                </b>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ================= DETAILS MODAL ================= -->
+
+<div id="detailsModal"
+     class="modal">
+
+
+    <div class="modal-box">
+
+
+        <button class="close"
+                onclick="closeModal()">
+
+            ×
+
+        </button>
+
+
+        <div class="modal-header">
+
+
+            <div class="modal-icon"
+                 id="modalIcon">
+
+                📄
+
+            </div>
+
+
+            <div>
+
+                <span class="modal-label">
+                    PROTECTED RECORD
+                </span>
+
+                <h2 id="modalTitle">
+                    Document Details
+                </h2>
+
+                <p id="modalDescription">
+                    Verified information associated with this service.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="modal-status">
+
+            <span class="status-dot"></span>
+
+            Identity Match Verified
+
+        </div>
+
+
+
+        <div class="modal-details">
+
+
+            <div>
+
+                <span>
+                    Service
+                </span>
+
+                <strong id="modalService">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Current Status
+                </span>
+
+                <strong class="success-text"
+                        id="modalStatus">
+
+                    Verified / Active
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Verification Source
+                </span>
+
+                <strong>
+                    Authorized Record
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Last Verification
+                </span>
+
+                <strong id="modalDate">
+                    September 2026
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Protection
+                </span>
+
+                <strong class="success-text">
+                    Secure
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="modal-note">
+
+            <span>
+                🔒
+            </span>
+
+            <p>
+                Sensitive document information is masked in this prototype for security.
+            </p>
+
+        </div>
+
+
+
+        <button class="modal-action"
+                onclick="requestFromModal()">
+
+            Request Protection Action
+
+            <span>
+                →
+            </span>
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script src="Documents.js"></script>
+
+</body>
+
+</html>

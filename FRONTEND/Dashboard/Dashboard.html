@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SafePin | Dashboard</title>
+
+    <link rel="stylesheet"
+          href="Dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     GOVERNMENT HEADER
+===================================================== -->
+
+<header class="government-header">
+
+    <div class="government-brand">
+
+        <div class="emblem">
+            🇮🇳
+        </div>
+
+        <div>
+
+            <strong>GOVERNMENT OF INDIA</strong>
+
+            <span>
+                Digital Governance & Secure Public Services
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-security">
+
+        <span class="live-dot"></span>
+
+        Secure Government Portal
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡
+        </div>
+
+        <div>
+
+            <h2>SafePin</h2>
+
+            <span>
+                Secure Identity Protection
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="profile-mini">
+
+        <div class="profile-avatar"
+             id="sidebarUserInitials">
+            VR
+        </div>
+
+        <div>
+
+            <strong id="sidebarUserName">
+                Verified Requester
+            </strong>
+
+            <span>
+                Verified Nominee
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <nav class="menu">
+
+
+        <div class="menu-title">
+            MAIN
+        </div>
+
+
+        <div class="menu-item active"
+             onclick="showPage('dashboard')">
+
+            <span class="menu-icon">⌂</span>
+
+            Dashboard
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="openDocuments()">
+
+            <span class="menu-icon">▣</span>
+
+            Documents
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="openRequests()">
+
+            <span class="menu-icon">▤</span>
+
+            Requests
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="showPage('notifications')">
+
+            <span class="menu-icon">🔔</span>
+
+            Notifications
+
+            <span class="notification-count"
+                  id="sidebarNotificationCount">
+                0
+            </span>
+
+        </div>
+
+
+        <div class="menu-title second">
+            ACCOUNT
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="showPage('profile')">
+
+            <span class="menu-icon">●</span>
+
+            Profile
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="openSystemOverview()">
+
+            <span class="menu-icon">⚙</span>
+
+            System Overview
+
+        </div>
+
+
+    </nav>
+
+
+
+    <div class="sidebar-bottom">
+
+
+        <div class="system-status">
+
+            <span class="status-circle"></span>
+
+            <div>
+
+                <strong>System Secure</strong>
+
+                <small>
+                    All services operational
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="menu-item logout"
+             onclick="logout()">
+
+            <span class="menu-icon">
+                ↪
+            </span>
+
+            Logout
+
+        </div>
+
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="main">
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+
+        <div class="page-heading">
+
+            <div class="breadcrumb">
+                SafePin / <span id="breadcrumbPage">Dashboard</span>
+            </div>
+
+            <h1 id="pageTitle">
+                Dashboard
+            </h1>
+
+            <p id="pageSubtitle">
+                Secure identity protection overview
+            </p>
+
+        </div>
+
+
+
+        <div class="top-actions">
+
+
+            <div class="secure-status">
+
+                <span class="live-dot"></span>
+
+                LIVE
+
+            </div>
+
+
+
+            <button class="notification-button"
+                    onclick="showPage('notifications')">
+
+                🔔
+
+                <b id="topNotificationCount">
+                    0
+                </b>
+
+            </button>
+
+
+
+            <div class="user-profile">
+
+                <div class="avatar"
+                     id="topProfileInitials">
+                    VR
+                </div>
+
+                <div>
+
+                    <strong id="topProfileName">
+                        Verified Requester
+                    </strong>
+
+                    <small>
+                        Verified Nominee
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+<!-- =====================================================
+     DASHBOARD PAGE
+===================================================== -->
+
+<section id="dashboardPage"
+         class="page">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome-card">
+
+
+        <div class="welcome-content">
+
+
+            <div class="verified-badge">
+                ✓ IDENTITY VERIFIED
+            </div>
+
+
+            <h2>
+                Welcome back,
+                <span id="welcomeUserName">
+                    Verified Requester
+                </span>
+            </h2>
+
+
+            <p>
+                Your linked records and protection requests
+                are being monitored through the SafePin
+                secure coordination platform.
+            </p>
+
+
+            <div class="welcome-meta">
+
+                <span>
+                    🛡 Secure Session
+                </span>
+
+                <span>
+                    ● Last verified today
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="welcome-visual">
+
+            <div class="shield-ring">
+
+                <div class="shield">
+                    🛡
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ▣
+                </div>
+
+                <span class="stat-status positive">
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <span class="stat-label">
+                Protected Records
+            </span>
+
+            <h3 id="protectedRecordsCount">
+                00
+            </h3>
+
+            <p>
+                Linked to verified identity
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ⏳
+                </div>
+
+                <span class="stat-status warning">
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <span class="stat-label">
+                Active Requests
+            </span>
+
+            <h3 id="activeRequestsCount">
+                00
+            </h3>
+
+            <p>
+                Currently being processed
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ✓
+                </div>
+
+                <span class="stat-status positive">
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <span class="stat-label">
+                Verified Records
+            </span>
+
+            <h3 id="verifiedRecordsCount">
+                00/00
+            </h3>
+
+            <p>
+                Verification completed
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    🔐
+                </div>
+
+                <span class="stat-status secure">
+                    SAFE
+                </span>
+
+            </div>
+
+
+            <span class="stat-label">
+                Security Status
+            </span>
+
+            <h3 id="securityStatus">
+                Secure
+            </h3>
+
+            <p>
+                T-REX security status
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- MAIN DASHBOARD GRID -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- PROTECTION STATUS -->
+
+        <div class="panel protection-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        SECURITY OVERVIEW
+                    </span>
+
+                    <h2>
+                        Identity Protection Status
+                    </h2>
+
+                </div>
+
+                <span class="secure-pill"
+                      id="protectionStatusPill">
+                    ● Protected
+                </span>
+
+            </div>
+
+
+
+            <div class="protection-content">
+
+
+                <div class="protection-score">
+
+                    <div class="score-circle">
+
+                        <strong id="protectionScore">
+                            0%
+                        </strong>
+
+                        <span>
+                            Protected
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="protection-details">
+
+
+                    <div class="protection-item">
+
+                        <div>
+                            <strong>
+                                Identity Verification
+                            </strong>
+
+                            <span id="identityVerificationStatus">
+                                Successfully verified
+                            </span>
+                        </div>
+
+                        <b id="identityVerificationIcon">
+                            ✓
+                        </b>
+
+                    </div>
+
+
+
+                    <div class="protection-item">
+
+                        <div>
+                            <strong>
+                                Linked Records
+                            </strong>
+
+                            <span id="linkedRecordsStatus">
+                                Loading records...
+                            </span>
+                        </div>
+
+                        <b id="linkedRecordsIcon">
+                            ✓
+                        </b>
+
+                    </div>
+
+
+
+                    <div class="protection-item">
+
+                        <div>
+                            <strong>
+                                Institutional Requests
+                            </strong>
+
+                            <span id="institutionalRequestsStatus">
+                                Loading requests...
+                            </span>
+                        </div>
+
+                        <b class="orange"
+                           id="institutionalRequestsIcon">
+                            !
+                        </b>
+
+                    </div>
+
+
+
+                    <div class="protection-item">
+
+                        <div>
+                            <strong>
+                                Security Monitoring
+                            </strong>
+
+                            <span id="securityMonitoringStatus">
+                                Loading security status...
+                            </span>
+                        </div>
+
+                        <b id="securityMonitoringIcon">
+                            ✓
+                        </b>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="panel quick-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        ACTIONS
+                    </span>
+
+                    <h2>
+                        Quick Actions
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="quick-actions">
+
+
+                <button onclick="openDocuments()">
+
+                    <span>
+                        📄
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            View Documents
+                        </strong>
+
+                        <small>
+                            Manage linked records
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+
+                <button onclick="openRequests()">
+
+                    <span>
+                        📋
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Track Requests
+                        </strong>
+
+                        <small>
+                            View case progress
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+
+                <button onclick="showPage('notifications')">
+
+                    <span>
+                        🔔
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Notifications
+                        </strong>
+
+                        <small id="quickNotificationText">
+                            Loading updates...
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+
+                <button onclick="showPage('profile')">
+
+                    <span>
+                        👤
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            View Profile
+                        </strong>
+
+                        <small>
+                            Account information
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- DOCUMENTS -->
+
+    <div class="section-header">
+
+
+        <div>
+
+            <span class="section-label">
+                CONNECTED RECORDS
+            </span>
+
+            <h2>
+                Protected Documents & Services
+            </h2>
+
+            <p>
+                Records associated with the verified identity
+            </p>
+
+        </div>
+
+
+        <button class="outline-button"
+                onclick="openDocuments()">
+
+            View All Documents →
+
+        </button>
+
+
+    </div>
+
+
+
+    <div class="documents-grid">
+
+
+        <div class="document-card">
+
+            <div class="document-top">
+
+                <div class="document-icon">
+                    🪪
+                </div>
+
+                <span class="active-status">
+                    ● Active
+                </span>
+
+            </div>
+
+
+            <h3>
+                Aadhaar Card
+            </h3>
+
+            <p>
+                Government Identity
+            </p>
+
+
+            <div class="document-number">
+                XXXX XXXX 7824
+            </div>
+
+
+            <button onclick="requestDocument('Aadhaar Card')">
+                Request Action
+            </button>
+
+        </div>
+
+
+
+        <div class="document-card">
+
+            <div class="document-top">
+
+                <div class="document-icon">
+                    💳
+                </div>
+
+                <span class="active-status">
+                    ● Active
+                </span>
+
+            </div>
+
+
+            <h3>
+                PAN Card
+            </h3>
+
+            <p>
+                Tax Identification
+            </p>
+
+
+            <div class="document-number">
+                XXXXX4821K
+            </div>
+
+
+            <button onclick="requestDocument('PAN Card')">
+                Request Action
+            </button>
+
+        </div>
+
+
+
+        <div class="document-card">
+
+            <div class="document-top">
+
+                <div class="document-icon">
+                    🏦
+                </div>
+
+                <span class="active-status">
+                    ● Active
+                </span>
+
+            </div>
+
+
+            <h3>
+                Bank Account
+            </h3>
+
+            <p>
+                Financial Service
+            </p>
+
+
+            <div class="document-number">
+                XXXX XXXX 4521
+            </div>
+
+
+            <button onclick="requestDocument('Bank Account')">
+                Request Action
+            </button>
+
+        </div>
+
+
+
+        <div class="document-card">
+
+            <div class="document-top">
+
+                <div class="document-icon">
+                    📱
+                </div>
+
+                <span class="active-status">
+                    ● Active
+                </span>
+
+            </div>
+
+
+            <h3>
+                Mobile Connection
+            </h3>
+
+            <p>
+                Telecom Service
+            </p>
+
+
+            <div class="document-number">
+                +91 XXXXX 4218
+            </div>
+
+
+            <button onclick="requestDocument('Mobile Connection')">
+                Request Action
+            </button>
+
+        </div>
+
+
+
+        <div class="document-card">
+
+            <div class="document-top">
+
+                <div class="document-icon">
+                    🛡
+                </div>
+
+                <span class="active-status">
+                    ● Active
+                </span>
+
+            </div>
+
+
+            <h3>
+                Insurance Policy
+            </h3>
+
+            <p>
+                Insurance Service
+            </p>
+
+
+            <div class="document-number">
+                POL-XXXX-2918
+            </div>
+
+
+            <button onclick="requestDocument('Insurance Policy')">
+                Request Action
+            </button>
+
+        </div>
+
+
+
+        <div class="document-card">
+
+            <div class="document-top">
+
+                <div class="document-icon">
+                    🚗
+                </div>
+
+                <span class="active-status">
+                    ● Active
+                </span>
+
+            </div>
+
+
+            <h3>
+                Vehicle Registration
+            </h3>
+
+            <p>
+                Transport Service
+            </p>
+
+
+            <div class="document-number">
+                MP XX XX 4521
+            </div>
+
+
+            <button onclick="requestDocument('Vehicle Registration')">
+                Request Action
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- REQUESTS -->
+
+    <div class="section-header requests-header">
+
+
+        <div>
+
+            <span class="section-label">
+                CASE MANAGEMENT
+            </span>
+
+            <h2>
+                Recent Protection Requests
+            </h2>
+
+            <p>
+                Track your submitted cases and institutional actions
+            </p>
+
+        </div>
+
+
+        <button class="outline-button"
+                onclick="openRequests()">
+
+            View All Requests →
+
+        </button>
+
+
+    </div>
+
+
+
+    <div class="requests-panel"
+         id="recentRequestsPanel">
+
+
+        <div class="request-row request-heading">
+
+            <span>
+                CASE ID
+            </span>
+
+            <span>
+                REQUEST
+            </span>
+
+            <span>
+                INSTITUTION
+            </span>
+
+            <span>
+                DATE
+            </span>
+
+            <span>
+                STATUS
+            </span>
+
+        </div>
+
+
+        <!-- Dashboard.js can populate real backend requests here -->
+
+        <div id="recentRequestsList">
+
+            <div class="request-row">
+
+                <span class="case-id">
+                    —
+                </span>
+
+                <span>
+                    No request loaded
+                </span>
+
+                <span>
+                    —
+                </span>
+
+                <span>
+                    —
+                </span>
+
+                <span class="request-status review">
+                    ● Loading
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- RECENT ACTIVITY -->
+
+    <div class="activity-section">
+
+
+        <div class="section-header">
+
+            <div>
+
+                <span class="section-label">
+                    AUDIT TRAIL
+                </span>
+
+                <h2>
+                    Recent Activity
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="activity-timeline"
+             id="activityTimeline">
+
+
+            <div class="activity-item">
+
+                <div class="activity-dot">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        T-REX session authenticated
+                    </strong>
+
+                    <p>
+                        Your authenticated session is active.
+                    </p>
+
+                    <small>
+                        Current session
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     NOTIFICATIONS
+===================================================== -->
+
+<section id="notificationsPage"
+         class="page hidden-page">
+
+
+    <div class="page-card">
+
+
+        <span class="section-label">
+            ACCOUNT UPDATES
+        </span>
+
+        <h2>
+            Notifications
+        </h2>
+
+        <p class="page-description">
+            Important updates regarding your identity,
+            records and protection requests.
+        </p>
+
+
+
+        <div class="notification-list"
+             id="dashboardNotificationList">
+
+            <div class="notification-item">
+
+                <div class="notification-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Loading notifications...
+                    </strong>
+
+                    <p>
+                        T-REX is retrieving your latest updates.
+                    </p>
+
+                    <small>
+                        Please wait
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PROFILE
+===================================================== -->
+
+<section id="profilePage"
+         class="page hidden-page">
+
+
+    <div class="profile-layout">
+
+
+        <div class="profile-card-main">
+
+
+            <div class="large-avatar"
+                 id="dashboardProfileInitials">
+                VR
+            </div>
+
+
+            <h2 id="dashboardProfileName">
+                Verified Requester
+            </h2>
+
+            <span class="verified-profile">
+                ✓ Verified Nominee
+            </span>
+
+
+            <p>
+                SafePin verified account
+            </p>
+
+
+        </div>
+
+
+
+        <div class="profile-information">
+
+
+            <span class="section-label">
+                VERIFIED INFORMATION
+            </span>
+
+            <h2>
+                Profile Information
+            </h2>
+
+
+            <div class="profile-row">
+
+                <span>
+                    Full Name
+                </span>
+
+                <strong id="dashboardFullName">
+                    Verified Requester
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>
+                    Verification Status
+                </span>
+
+                <strong class="green-text"
+                        id="dashboardVerificationStatus">
+                    ✓ Verified
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>
+                    Aadhaar
+                </span>
+
+                <strong id="dashboardAadhaar">
+                    XXXX XXXX
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>
+                    Mobile
+                </span>
+
+                <strong id="dashboardPhone">
+                    Not provided
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>
+                    Account Security
+                </span>
+
+                <strong class="green-text"
+                        id="dashboardAccountSecurity">
+                    Secure
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+</main>
+
+
+
+<script src="Dashboard.js"></script>
+
+
+</body>
+
+</html>

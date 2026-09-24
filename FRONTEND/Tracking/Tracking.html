@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SafePin | Request Tracking</title>
+
+    <link rel="stylesheet"
+          href="Tracking.css">
+
+</head>
+
+
+<body>
+
+
+<!-- GOVERNMENT HEADER -->
+
+<div class="gov-header">
+
+    <div class="gov-left">
+
+        <div class="gov-emblem">
+            🇮🇳
+        </div>
+
+        <div>
+
+            <strong>Government of India</strong>
+
+            <span>Digital Identity Protection Initiative</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡️
+        </div>
+
+        <div>
+
+            <h2>SafePin</h2>
+
+            <span>Secure Protection</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu">
+
+
+        <div class="menu-item"
+             onclick="goDashboard()">
+
+            <span>⌂</span>
+
+            Dashboard
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="goDocuments()">
+
+            <span>▣</span>
+
+            Documents
+
+        </div>
+
+
+
+        <div class="menu-item active">
+
+            <span>◷</span>
+
+            Requests
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="showNotifications()">
+
+            <span>🔔</span>
+
+            Notifications
+
+            <b id="trackingSidebarNotificationBadge">0</b>
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="goProfile()">
+
+            <span>●</span>
+
+            Profile
+
+        </div>
+
+
+
+        <div class="menu-item"
+             onclick="goSystem()">
+
+            <span>▤</span>
+
+            System Overview
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="sidebar-bottom">
+
+
+        <div class="secure-box">
+
+            <span class="green-dot"></span>
+
+            <div>
+
+                <strong>System Secure</strong>
+
+                <small>All services operational</small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="menu-item logout"
+             onclick="logout(event)">
+
+            <span>↪</span>
+
+            Logout
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+        <div>
+
+            <h1>Request Tracking</h1>
+
+            <p>
+                Track and monitor the progress of your submitted protection request.
+            </p>
+
+        </div>
+
+
+
+        <div class="top-right">
+
+
+            <div class="live">
+
+                <span></span>
+
+                LIVE
+
+            </div>
+
+
+
+            <div class="notification">
+
+                🔔
+
+                <b id="trackingNotificationBadge">0</b>
+
+            </div>
+
+
+
+            <div class="user">
+
+                <div class="avatar"
+                     id="trackingProfileAvatar">
+
+                    TR
+
+                </div>
+
+                <div>
+
+                    <strong id="trackingProfileName">
+                        Loading...
+                    </strong>
+
+                    <small id="trackingProfileRole">
+                        Verified Requester
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+
+
+    <!-- SEARCH -->
+
+    <div class="search-card">
+
+
+        <div class="search-title">
+
+
+            <div class="search-icon">
+                🔍
+            </div>
+
+
+            <div>
+
+                <h2>Track a Request</h2>
+
+                <p>
+                    Enter your Case ID to view the latest request status.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="caseSearch"
+                placeholder="Enter Case ID e.g. 2026-583421">
+
+
+            <button onclick="searchCase()">
+
+                Track Request →
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <!-- CURRENT CASE -->
+
+    <div class="case-header">
+
+
+        <div>
+
+            <span class="case-label">
+                CURRENT CASE
+            </span>
+
+
+            <h2 id="caseId">
+                —
+            </h2>
+
+
+            <p id="caseDescription">
+                No request selected.
+            </p>
+
+        </div>
+
+
+
+        <div class="status-badge">
+
+            <span></span>
+
+            <div>
+
+                <strong id="currentStatus">
+                    Awaiting Request
+                </strong>
+
+                <small>
+                    Current Status
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <!-- CASE INFORMATION -->
+
+    <div class="info-grid">
+
+
+        <div class="info-card">
+
+            <span>DOCUMENT / SERVICE</span>
+
+            <strong id="documentName">
+                —
+            </strong>
+
+        </div>
+
+
+
+        <div class="info-card">
+
+            <span>REQUEST TYPE</span>
+
+            <strong id="actionName">
+                —
+            </strong>
+
+        </div>
+
+
+
+        <div class="info-card">
+
+            <span>SUBMITTED ON</span>
+
+            <strong id="submittedDate">
+                —
+            </strong>
+
+        </div>
+
+
+
+        <div class="info-card">
+
+            <span>REFERENCE NUMBER</span>
+
+            <strong id="referenceNumber">
+                —
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <!-- REQUEST TIMELINE -->
+
+    <div class="tracking-card">
+
+
+        <div class="tracking-header">
+
+
+            <div>
+
+                <h2>Request Timeline</h2>
+
+                <p>
+                    Follow each stage of your request.
+                </p>
+
+            </div>
+
+
+            <span class="secure-tag">
+                🔒 SECURE
+            </span>
+
+
+        </div>
+
+
+
+
+        <div class="timeline">
+
+
+            <!-- STEP 1 -->
+
+            <div class="timeline-item completed">
+
+                <div class="timeline-marker">
+                    ✓
+                </div>
+
+
+                <div class="timeline-content">
+
+
+                    <div class="timeline-top">
+
+
+                        <div>
+
+                            <h3>
+                                Request Submitted
+                            </h3>
+
+                            <span>
+                                Your request was successfully received by SafePin.
+                            </span>
+
+                        </div>
+
+
+                        <strong>
+                            COMPLETED
+                        </strong>
+
+
+                    </div>
+
+
+                    <p class="time"
+                       id="submittedTime">
+
+                        Request received
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- STEP 2 -->
+
+            <div class="timeline-item pending">
+
+                <div class="timeline-marker">
+                    2
+                </div>
+
+
+                <div class="timeline-content">
+
+
+                    <div class="timeline-top">
+
+
+                        <div>
+
+                            <h3>
+                                Verification Officer Review
+                            </h3>
+
+                            <span>
+                                Submitted identity and supporting information is reviewed.
+                            </span>
+
+                        </div>
+
+
+                        <strong id="verificationStepStatus">
+                            PENDING
+                        </strong>
+
+
+                    </div>
+
+
+                    <p class="time"
+                       id="verificationStepTime">
+
+                        Awaiting verification review
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- STEP 3 -->
+
+            <div class="timeline-item pending">
+
+                <div class="timeline-marker">
+                    3
+                </div>
+
+
+                <div class="timeline-content">
+
+
+                    <div class="timeline-top">
+
+
+                        <div>
+
+                            <h3>
+                                Sent to Concerned Department
+                            </h3>
+
+                            <span>
+                                The request is forwarded to the relevant institution or department after verification.
+                            </span>
+
+                        </div>
+
+
+                        <strong id="departmentStepStatus">
+                            PENDING
+                        </strong>
+
+
+                    </div>
+
+
+                    <p class="time"
+                       id="departmentStepTime">
+
+                        Awaiting verification
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- STEP 4 -->
+
+            <div class="timeline-item pending">
+
+                <div class="timeline-marker">
+                    4
+                </div>
+
+
+                <div class="timeline-content">
+
+
+                    <div class="timeline-top">
+
+
+                        <div>
+
+                            <h3>
+                                Department Action
+                            </h3>
+
+                            <span>
+                                The concerned institution or department processes the requested action.
+                            </span>
+
+                        </div>
+
+
+                        <strong id="actionStepStatus">
+                            PENDING
+                        </strong>
+
+
+                    </div>
+
+
+                    <p class="time"
+                       id="actionStepTime">
+
+                        Awaiting department action
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- STEP 5 -->
+
+            <div class="timeline-item pending">
+
+                <div class="timeline-marker">
+                    5
+                </div>
+
+
+                <div class="timeline-content">
+
+
+                    <div class="timeline-top">
+
+
+                        <div>
+
+                            <h3>
+                                Final Approval
+                            </h3>
+
+                            <span>
+                                Final status is confirmed after the responsible authority completes its review.
+                            </span>
+
+                        </div>
+
+
+                        <strong id="approvalStepStatus">
+                            PENDING
+                        </strong>
+
+
+                    </div>
+
+
+                    <p class="time"
+                       id="approvalStepTime">
+
+                        Awaiting final approval
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- STEP 6 -->
+
+            <div class="timeline-item pending">
+
+                <div class="timeline-marker">
+                    6
+                </div>
+
+
+                <div class="timeline-content">
+
+
+                    <div class="timeline-top">
+
+
+                        <div>
+
+                            <h3>
+                                Case Closed
+                            </h3>
+
+                            <span>
+                                The request is closed after final confirmation.
+                            </span>
+
+                        </div>
+
+
+                        <strong id="closedStepStatus">
+                            PENDING
+                        </strong>
+
+
+                    </div>
+
+
+                    <p class="time"
+                       id="closedStepTime">
+
+                        Awaiting completion
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+
+    <!-- REQUEST DETAILS -->
+
+    <div class="bottom-grid">
+
+
+        <div class="details-card">
+
+
+            <h2>Request Details</h2>
+
+
+
+            <div class="detail-row">
+
+                <span>Applicant</span>
+
+                <strong id="detailApplicant">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <span>Document / Service</span>
+
+                <strong id="detailDocument">
+                    —
+                </strong>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <span>Requested Action</span>
+
+                <strong id="detailAction">
+                    —
+                </strong>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <span>Request Reason</span>
+
+                <strong id="detailReason">
+                    —
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+
+        <!-- HELP -->
+
+        <div class="help-card">
+
+
+            <div class="help-icon">
+                ?
+            </div>
+
+
+            <h2>Need Help?</h2>
+
+
+            <p>
+
+                If you have questions about your request,
+                you can raise a query with the SafePin
+                coordination team.
+
+            </p>
+
+
+
+            <button onclick="raiseQuery()">
+
+                Raise a Query →
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <!-- FOOTER -->
+
+    <div class="page-footer">
+
+
+        <span>
+
+            🔐 Your request information is encrypted
+            and securely processed.
+
+        </span>
+
+
+        <span>
+
+            SafePin Secure Protection Platform
+
+        </span>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+<script src="Tracking.js"></script>
+
+
+</body>
+
+</html>

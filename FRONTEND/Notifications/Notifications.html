@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SafePin | Notifications</title>
+
+    <link rel="stylesheet"
+          href="Notifications.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= GOVERNMENT HEADER ================= -->
+
+<header class="gov-header">
+
+    <div class="gov-left">
+
+        <div class="gov-emblem">
+            🇮🇳
+        </div>
+
+        <div class="gov-text">
+
+            <strong>Government of India</strong>
+
+            <span>
+                Digital Identity Protection Initiative
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡️
+        </div>
+
+        <div>
+
+            <h2>SafePin</h2>
+
+            <span>
+                Secure Protection
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- USER -->
+
+    <div class="user-box">
+
+        <div class="avatar"
+             id="notificationsProfileAvatar">
+
+            TR
+
+        </div>
+
+        <div>
+
+            <strong id="notificationsProfileName">
+                Loading...
+            </strong>
+
+            <small>
+                Verified Nominee
+            </small>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- NAVIGATION -->
+
+    <nav>
+
+
+        <a href="../Dashboard/Dashboard.html">
+
+            <span>⌂</span>
+
+            Dashboard
+
+        </a>
+
+
+
+        <a href="../Documents/Documents.html">
+
+            <span>▣</span>
+
+            Documents
+
+        </a>
+
+
+
+        <a href="../Request/Request.html">
+
+            <span>＋</span>
+
+            New Request
+
+        </a>
+
+
+
+        <a href="../Tracking/Tracking.html">
+
+            <span>◷</span>
+
+            Tracking
+
+        </a>
+
+
+
+        <a href="Notifications.html"
+           class="active">
+
+            <span>🔔</span>
+
+            Notifications
+
+            <b class="side-count"
+               id="sideCount">
+
+                0
+
+            </b>
+
+        </a>
+
+
+
+        <a href="../Profile/Profile.html">
+
+            <span>●</span>
+
+            Profile
+
+        </a>
+
+
+
+        <a href="../Security/Security.html">
+
+            <span>🔐</span>
+
+            Security Center
+
+        </a>
+
+
+
+        <a href="../System/System.html">
+
+            <span>▤</span>
+
+            System Overview
+
+        </a>
+
+
+
+        <a href="../Login/Login.html"
+           onclick="logout()">
+
+            <span>↪</span>
+
+            Logout
+
+        </a>
+
+
+    </nav>
+
+
+
+    <!-- SECURE STATUS -->
+
+    <div class="secure-status">
+
+        <div class="status-dot"></div>
+
+        <div>
+
+            <strong>
+                System Secure
+            </strong>
+
+            <small>
+                All services operational
+            </small>
+
+        </div>
+
+    </div>
+
+
+</aside>
+
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+
+        <div class="page-heading">
+
+            <h1>
+                Notifications
+            </h1>
+
+            <p>
+                Stay updated with requests, security and system activity.
+            </p>
+
+        </div>
+
+
+
+        <div class="top-actions">
+
+
+            <span class="live">
+
+                <span></span>
+
+                LIVE
+
+            </span>
+
+
+
+            <div class="top-profile">
+
+                <div class="small-avatar"
+                     id="notificationsTopProfileAvatar">
+
+                    TR
+
+                </div>
+
+                <div>
+
+                    <strong id="notificationsTopProfileName">
+                        Loading...
+                    </strong>
+
+                    <small>
+                        Verified Nominee
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <section class="content">
+
+
+
+        <!-- NOTIFICATION HEADER -->
+
+        <div class="notification-header">
+
+
+            <div class="notification-title">
+
+
+                <div class="bell-large">
+                    🔔
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Notification Center
+                    </h2>
+
+                    <p>
+                        Important updates about your SafePin requests and security.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="notification-actions">
+
+
+                <span class="unread-summary">
+
+                    <strong id="unreadCount">
+                        0
+                    </strong>
+
+                    unread
+
+                </span>
+
+
+
+                <button
+                    class="mark-all"
+                    onclick="markAllRead()">
+
+                    ✓ Mark all as read
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+        <!-- ================= QUICK STATUS ================= -->
+
+        <div class="quick-status">
+
+
+            <div class="quick-item">
+
+                <div class="quick-icon maroon">
+                    🔔
+                </div>
+
+                <div>
+
+                    <strong id="totalCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Total Notifications
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="quick-item">
+
+                <div class="quick-icon orange">
+                    ●
+                </div>
+
+                <div>
+
+                    <strong id="pendingCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Unread
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="quick-item">
+
+                <div class="quick-icon red">
+                    !
+                </div>
+
+                <div>
+
+                    <strong id="securityCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Security Alerts
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="quick-item">
+
+                <div class="quick-icon green">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong id="requestCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Request Updates
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+
+        <!-- ================= FILTER TOOLBAR ================= -->
+
+        <div class="notification-toolbar">
+
+
+            <div class="filters">
+
+
+                <button
+                    class="filter active"
+                    data-filter="all"
+                    onclick="filterNotifications('all', this)">
+
+                    All
+
+                    <span id="allBadge">
+                        0
+                    </span>
+
+                </button>
+
+
+
+                <button
+                    class="filter"
+                    data-filter="unread"
+                    onclick="filterNotifications('unread', this)">
+
+                    Unread
+
+                    <span id="unreadBadge">
+                        0
+                    </span>
+
+                </button>
+
+
+
+                <button
+                    class="filter"
+                    data-filter="request"
+                    onclick="filterNotifications('request', this)">
+
+                    Requests
+
+                </button>
+
+
+
+                <button
+                    class="filter"
+                    data-filter="security"
+                    onclick="filterNotifications('security', this)">
+
+                    Security
+
+                </button>
+
+
+
+                <button
+                    class="filter"
+                    data-filter="system"
+                    onclick="filterNotifications('system', this)">
+
+                    System
+
+                </button>
+
+
+            </div>
+
+
+
+            <div class="notification-tools">
+
+
+                <button onclick="refreshNotifications(this)">
+
+                    ↻ Refresh
+
+                </button>
+
+
+
+                <button onclick="clearReadNotifications()">
+
+                    Clear Read
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+        <!-- ================= NOTIFICATION LIST ================= -->
+
+        <div
+            class="notification-list"
+            id="notificationList">
+
+        </div>
+
+
+
+
+        <!-- ================= EMPTY STATE ================= -->
+
+        <div
+            class="empty-state"
+            id="emptyState">
+
+
+            <div class="empty-icon">
+                🔔
+            </div>
+
+
+            <h3>
+                No notifications found
+            </h3>
+
+
+            <p>
+                There are no notifications matching your current filter.
+            </p>
+
+
+        </div>
+
+
+
+
+        <!-- ================= SECURITY FOOTER ================= -->
+
+        <div class="notification-security">
+
+
+            <div class="security-symbol">
+                🔐
+            </div>
+
+
+            <div class="security-content">
+
+                <strong>
+                    Your notifications are protected
+                </strong>
+
+                <p>
+                    SafePin securely records important request,
+                    verification and security activity associated
+                    with your authorized account.
+                </p>
+
+            </div>
+
+
+            <a href="../Security/Security.html">
+
+                Security Center →
+
+            </a>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script src="Notifications.js"></script>
+
+
+</body>
+
+</html>

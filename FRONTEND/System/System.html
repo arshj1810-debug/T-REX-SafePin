@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        System Overview | SafePin
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="System.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     GOVERNMENT HEADER
+===================================================== -->
+
+<div class="gov-header">
+
+    <div class="gov-left">
+
+        <span class="india-icon">
+            🇮🇳
+        </span>
+
+        <div>
+
+            <strong>
+                Government of India
+            </strong>
+
+            <small>
+                Digital Identity Protection Portal
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <span class="prototype-label">
+        SAFE PIN • PROTOTYPE
+    </span>
+
+</div>
+
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div class="app">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <div class="logo-box">
+                S
+            </div>
+
+            <div>
+
+                <h2>
+                    SafePin
+                </h2>
+
+                <span>
+                    Secure Identity Protection
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- USER PROFILE -->
+
+        <div class="user-box">
+
+            <div
+                class="avatar"
+                id="sidebarProfileAvatar">
+
+                TR
+
+            </div>
+
+
+            <div>
+
+                <strong id="sidebarUserName">
+                    Loading...
+                </strong>
+
+                <small>
+                    Verified Nominee
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- NAVIGATION -->
+
+        <nav>
+
+
+            <a href="../Dashboard/Dashboard.html">
+
+                <span>
+                    ▣
+                </span>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="../Documents/Documents.html">
+
+                <span>
+                    ▤
+                </span>
+
+                Documents
+
+            </a>
+
+
+            <a href="../Request/Request.html">
+
+                <span>
+                    ＋
+                </span>
+
+                New Request
+
+            </a>
+
+
+            <a href="../Tracking/Tracking.html">
+
+                <span>
+                    ◉
+                </span>
+
+                Tracking
+
+            </a>
+
+
+            <a href="../Notifications/Notifications.html">
+
+                <span>
+                    🔔
+                </span>
+
+                Notifications
+
+            </a>
+
+
+            <a href="../Profile/Profile.html">
+
+                <span>
+                    👤
+                </span>
+
+                Profile
+
+            </a>
+
+
+            <a href="../Security/Security.html">
+
+                <span>
+                    🔐
+                </span>
+
+                Security Center
+
+            </a>
+
+
+            <a
+                href="System.html"
+                class="active">
+
+                <span>
+                    ▦
+                </span>
+
+                System Overview
+
+            </a>
+
+
+            <a
+                href="../Login/Login.html"
+                onclick="logout(); return false;">
+
+                <span>
+                    ⇥
+                </span>
+
+                Logout
+
+            </a>
+
+        </nav>
+
+
+
+        <!-- SYSTEM SECURITY STATUS -->
+
+        <div class="secure-status">
+
+            <div class="status-dot"></div>
+
+
+            <div>
+
+                <strong id="systemSecureStatus">
+                    System Secure
+                </strong>
+
+                <small id="systemSecureMessage">
+                    Checking services...
+                </small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAIN
+    ================================================== -->
+
+    <main class="main">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+
+            <div>
+
+                <div class="breadcrumb">
+                    SafePin / System Overview
+                </div>
+
+
+                <h1>
+                    System Overview
+                </h1>
+
+
+                <p>
+                    Monitor SafePin platform health, services
+                    and secure processing.
+                </p>
+
+            </div>
+
+
+
+            <div class="top-actions">
+
+
+                <span class="live">
+                    ● LIVE
+                </span>
+
+
+                <!-- TOP PROFILE -->
+
+                <div class="top-profile">
+
+
+                    <div
+                        class="small-avatar"
+                        id="topProfileInitials">
+
+                        TR
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="topProfileName">
+                            Loading...
+                        </strong>
+
+
+                        <small>
+                            Verified Nominee
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="content">
+
+
+
+            <!-- =================================================
+                 SYSTEM STATUS
+            ================================================== -->
+
+            <div class="system-banner">
+
+
+                <div class="system-icon">
+                    ✓
+                </div>
+
+
+                <div class="system-message">
+
+
+                    <div class="status-heading">
+
+
+                        <h2 id="systemStatusTitle">
+                            Checking System Status
+                        </h2>
+
+
+                        <span
+                            class="status-pill"
+                            id="systemStatusPill">
+
+                            Checking
+
+                        </span>
+
+                    </div>
+
+
+                    <p id="systemStatusMessage">
+                        Checking the T-REX backend and
+                        connected services.
+                    </p>
+
+                </div>
+
+
+                <div class="uptime">
+
+                    <strong id="backendStatus">
+                        --
+                    </strong>
+
+                    <span>
+                        Backend Status
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+            <div class="stats-grid">
+
+
+                <!-- ACTIVE CASES -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon maroon">
+                        📋
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Active Cases
+                        </span>
+
+
+                        <strong id="activeCases">
+                            0
+                        </strong>
+
+
+                        <small>
+                            T-REX cases
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REQUESTS -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon light">
+                        📄
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Requests
+                        </span>
+
+
+                        <strong id="documentsProcessed">
+                            0
+                        </strong>
+
+
+                        <small>
+                            Submitted requests
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NOTIFICATIONS -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon success">
+                        🔔
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Notifications
+                        </span>
+
+
+                        <strong id="notificationsCount">
+                            0
+                        </strong>
+
+
+                        <small>
+                            Account notifications
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SECURITY -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon warning">
+                        🛡
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Security
+                        </span>
+
+
+                        <strong id="securityState">
+                            --
+                        </strong>
+
+
+                        <small>
+                            Protection status
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CONNECTED SERVICES
+            ================================================== -->
+
+            <div class="section-title">
+
+
+                <div>
+
+                    <h2>
+                        Connected Services
+                    </h2>
+
+
+                    <p>
+                        Current status of services available
+                        through the T-REX prototype.
+                    </p>
+
+                </div>
+
+
+                <span class="demo-badge">
+                    Prototype Environment
+                </span>
+
+            </div>
+
+
+
+            <div class="services-grid">
+
+
+                <!-- BACKEND -->
+
+                <div class="service-card">
+
+
+                    <div class="service-logo">
+                        API
+                    </div>
+
+
+                    <div class="service-info">
+
+                        <h3>
+                            T-REX Backend
+                        </h3>
+
+
+                        <p>
+                            Core authentication and case
+                            management API
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="online"
+                        id="backendServiceStatus">
+
+                        ● Checking
+
+                    </span>
+
+                </div>
+
+
+
+                <!-- AUTH -->
+
+                <div class="service-card">
+
+
+                    <div class="service-logo">
+                        AUTH
+                    </div>
+
+
+                    <div class="service-info">
+
+                        <h3>
+                            Authentication
+                        </h3>
+
+
+                        <p>
+                            JWT-based authenticated sessions
+                        </p>
+
+                    </div>
+
+
+                    <span class="online">
+                        ● Operational
+                    </span>
+
+                </div>
+
+
+
+                <!-- CASE MANAGEMENT -->
+
+                <div class="service-card">
+
+
+                    <div class="service-logo">
+                        CASE
+                    </div>
+
+
+                    <div class="service-info">
+
+                        <h3>
+                            Case Management
+                        </h3>
+
+
+                        <p>
+                            Centralized protection request
+                            processing
+                        </p>
+
+                    </div>
+
+
+                    <span class="online">
+                        ● Operational
+                    </span>
+
+                </div>
+
+
+
+                <!-- SECURITY -->
+
+                <div class="service-card">
+
+
+                    <div class="service-logo">
+                        SEC
+                    </div>
+
+
+                    <div class="service-info">
+
+                        <h3>
+                            Security Service
+                        </h3>
+
+
+                        <p>
+                            Emergency account protection
+                            controls
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="online"
+                        id="securityServiceStatus">
+
+                        ● Checking
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TWO COLUMN
+            ================================================== -->
+
+            <div class="two-column">
+
+
+
+                <!-- REQUEST PIPELINE -->
+
+                <div class="card">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <h3>
+                                Request Processing
+                            </h3>
+
+
+                            <p>
+                                Current cases grouped by
+                                workflow status
+                            </p>
+
+                        </div>
+
+
+                        <span class="card-tag">
+                            LIVE
+                        </span>
+
+                    </div>
+
+
+
+                    <div class="pipeline">
+
+
+                        <!-- SUBMITTED -->
+
+                        <div class="pipeline-row">
+
+
+                            <span>
+                                Submitted
+                            </span>
+
+
+                            <div class="bar">
+
+                                <div
+                                    class="fill"
+                                    id="pipelineSubmitted"
+                                    style="width:0%;">
+
+                                </div>
+
+                            </div>
+
+
+                            <strong id="pipelineSubmittedValue">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- VERIFICATION -->
+
+                        <div class="pipeline-row">
+
+
+                            <span>
+                                Verification
+                            </span>
+
+
+                            <div class="bar">
+
+                                <div
+                                    class="fill"
+                                    id="pipelineVerification"
+                                    style="width:0%;">
+
+                                </div>
+
+                            </div>
+
+
+                            <strong id="pipelineVerificationValue">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="pipeline-row">
+
+
+                            <span>
+                                Department
+                            </span>
+
+
+                            <div class="bar">
+
+                                <div
+                                    class="fill"
+                                    id="pipelineDepartment"
+                                    style="width:0%;">
+
+                                </div>
+
+                            </div>
+
+
+                            <strong id="pipelineDepartmentValue">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- COMPLETED -->
+
+                        <div class="pipeline-row">
+
+
+                            <span>
+                                Completed
+                            </span>
+
+
+                            <div class="bar">
+
+                                <div
+                                    class="fill"
+                                    id="pipelineCompleted"
+                                    style="width:0%;">
+
+                                </div>
+
+                            </div>
+
+
+                            <strong id="pipelineCompletedValue">
+                                0%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SYSTEM ACTIVITY -->
+
+                <div class="card">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <h3>
+                                System Activity
+                            </h3>
+
+
+                            <p>
+                                Latest available platform events
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="systemActivity"
+                        class="system-activity">
+
+
+                        <div class="activity-item">
+
+
+                            <div class="activity-dot green">
+                                ✓
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Loading system activity
+                                </strong>
+
+
+                                <p>
+                                    Retrieving current T-REX activity.
+                                </p>
+
+
+                                <small class="activity-time">
+                                    Loading...
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SECURITY ARCHITECTURE
+            ================================================== -->
+
+            <div class="security-overview">
+
+
+                <div class="security-heading">
+
+
+                    <div class="security-main-icon">
+                        🔐
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            Secure Processing Architecture
+                        </h2>
+
+
+                        <p>
+                            T-REX is designed around controlled
+                            access, verification and auditable
+                            processing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="security-points">
+
+
+                    <!-- 01 -->
+
+                    <div>
+
+                        <span>
+                            01
+                        </span>
+
+
+                        <strong>
+                            Identity Verification
+                        </strong>
+
+
+                        <small>
+                            Validate authorized users through
+                            the authenticated workflow.
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- 02 -->
+
+                    <div>
+
+                        <span>
+                            02
+                        </span>
+
+
+                        <strong>
+                            Secure Processing
+                        </strong>
+
+
+                        <small>
+                            Route eligible requests through
+                            controlled workflows.
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- 03 -->
+
+                    <div>
+
+                        <span>
+                            03
+                        </span>
+
+
+                        <strong>
+                            Institution Coordination
+                        </strong>
+
+
+                        <small>
+                            Coordinate communication with
+                            connected services where supported.
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- 04 -->
+
+                    <div>
+
+                        <span>
+                            04
+                        </span>
+
+
+                        <strong>
+                            Audit Trail
+                        </strong>
+
+
+                        <small>
+                            Maintain traceable request and
+                            activity records.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 API MONITORING
+            ================================================== -->
+
+            <div class="api-card">
+
+
+                <div class="api-header">
+
+
+                    <div>
+
+                        <h2>
+                            API & Integration Monitoring
+                        </h2>
+
+
+                        <p>
+                            Current T-REX backend connectivity status.
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="api-status"
+                        id="apiOverallStatus">
+
+                        ● Checking
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="api-grid">
+
+
+                    <!-- RESPONSE -->
+
+                    <div>
+
+                        <span>
+                            Backend Response
+                        </span>
+
+
+                        <strong id="apiResponseTime">
+                            --
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- CASES -->
+
+                    <div>
+
+                        <span>
+                            Cases Loaded
+                        </span>
+
+
+                        <strong id="apiCases">
+                            0
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- REQUESTS -->
+
+                    <div>
+
+                        <span>
+                            Requests Loaded
+                        </span>
+
+
+                        <strong id="apiRequests">
+                            0
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- STATUS -->
+
+                    <div>
+
+                        <span>
+                            API Status
+                        </span>
+
+
+                        <strong id="apiStatus">
+                            Checking
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PROTOTYPE NOTICE
+            ================================================== -->
+
+            <div class="prototype-note">
+
+
+                <strong>
+                    Prototype Notice:
+                </strong>
+
+
+                Live statistics on this page are limited to
+                data currently exposed by the T-REX backend.
+                External institutional systems and real-world
+                service-provider statistics are not represented
+                as live data here.
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<script src="System.js"></script>
+
+</body>
+
+</html>

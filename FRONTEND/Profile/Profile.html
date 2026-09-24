@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SafePin | Profile</title>
+
+    <link rel="stylesheet"
+          href="Profile.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= GOVERNMENT HEADER ================= -->
+
+<header class="gov-header">
+
+    <div class="gov-left">
+
+        <div class="gov-emblem">
+            🇮🇳
+        </div>
+
+        <div class="gov-text">
+
+            <strong>Government of India</strong>
+
+            <span>
+                Digital Identity Protection Initiative
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡️
+        </div>
+
+        <div>
+
+            <h2>SafePin</h2>
+
+            <span>Secure Protection</span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- USER -->
+
+    <div class="user-box">
+
+        <div
+            class="avatar"
+            id="profileSidebarAvatar">
+
+            TR
+
+        </div>
+
+        <div>
+
+            <strong id="profileSidebarName">
+                Loading...
+            </strong>
+
+            <small>
+                Verified Nominee
+            </small>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= NAVIGATION ================= -->
+
+    <nav>
+
+        <a href="../Dashboard/Dashboard.html">
+
+            <span>⌂</span>
+
+            Dashboard
+
+        </a>
+
+
+        <a href="../Documents/Documents.html">
+
+            <span>▣</span>
+
+            Documents
+
+        </a>
+
+
+        <a href="../Request/Request.html">
+
+            <span>＋</span>
+
+            New Request
+
+        </a>
+
+
+        <a href="../Tracking/Tracking.html">
+
+            <span>◷</span>
+
+            Tracking
+
+        </a>
+
+
+        <a href="../Notifications/Notifications.html">
+
+            <span>🔔</span>
+
+            Notifications
+
+        </a>
+
+
+        <a href="Profile.html"
+           class="active">
+
+            <span>●</span>
+
+            Profile
+
+        </a>
+
+
+        <a href="../Security/Security.html">
+
+            <span>🔐</span>
+
+            Security Center
+
+        </a>
+
+
+        <a href="../System/System.html">
+
+            <span>▤</span>
+
+            System Overview
+
+        </a>
+
+
+        <a href="../Login/Login.html"
+           onclick="logout(); return false;">
+
+            <span>↪</span>
+
+            Logout
+
+        </a>
+
+    </nav>
+
+
+
+    <!-- ================= SECURITY STATUS ================= -->
+
+    <div class="secure-status">
+
+        <div class="status-dot"></div>
+
+        <div>
+
+            <strong>System Secure</strong>
+
+            <small>All services operational</small>
+
+        </div>
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+    <!-- ================= TOPBAR ================= -->
+
+    <header class="topbar">
+
+        <div>
+
+            <h1>
+                Profile
+            </h1>
+
+            <p>
+                Manage your SafePin account and protection preferences.
+            </p>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <span class="live">
+
+                <span></span>
+
+                LIVE
+
+            </span>
+
+
+            <!-- TOP PROFILE -->
+
+            <div class="top-profile">
+
+                <div
+                    class="small-avatar"
+                    id="profileTopAvatar">
+
+                    TR
+
+                </div>
+
+                <div>
+
+                    <strong id="profileTopName">
+                        Loading...
+                    </strong>
+
+                    <small>
+                        Verified Nominee
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <section class="content">
+
+
+        <!-- ================= PROFILE HERO ================= -->
+
+        <div class="profile-hero">
+
+            <div
+                class="profile-avatar-large"
+                id="profileHeroAvatar">
+
+                TR
+
+            </div>
+
+
+            <div class="profile-main-info">
+
+                <div class="verified-name">
+
+                    <h2 id="profileName">
+                        Loading...
+                    </h2>
+
+                    <span class="verified-badge">
+                        ✓ Verified
+                    </span>
+
+                </div>
+
+
+                <p>
+                    Authorized Nominee
+                </p>
+
+
+                <span class="profile-status">
+
+                    <span></span>
+
+                    Account Active
+
+                </span>
+
+            </div>
+
+
+            <!-- SAFE PIN ID -->
+
+            <div class="profile-id">
+
+                <span>
+                    SAFE PIN ID
+                </span>
+
+                <strong id="safePinId">
+                    Loading...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= PROFILE GRID ================= -->
+
+        <div class="profile-grid">
+
+
+            <!-- =================================================
+                 PERSONAL INFORMATION
+                 ================================================= -->
+
+            <div class="card personal-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Personal Information
+                        </h2>
+
+                        <p>
+                            Your registered account details
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="edit-btn"
+                        onclick="toggleEdit()">
+
+                        ✎ Edit Profile
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- FORM -->
+
+                <div class="form-grid">
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nameInput"
+                            value=""
+                            placeholder="Loading..."
+                            autocomplete="name"
+                            disabled>
+
+                    </div>
+
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="emailInput"
+                            value=""
+                            placeholder="Loading..."
+                            autocomplete="email"
+                            disabled>
+
+                    </div>
+
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Mobile Number
+                        </label>
+
+                        <div class="phone-field">
+
+                            <input
+                                type="text"
+                                id="phoneInput"
+                                value=""
+                                placeholder="Loading..."
+                                autocomplete="tel"
+                                disabled>
+
+                            <button
+                                type="button"
+                                class="verify-btn"
+                                onclick="verifyPhone()">
+
+                                Verify
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ROLE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Account Role
+                        </label>
+
+                        <input
+                            type="text"
+                            id="profileRole"
+                            value="Verified Nominee"
+                            disabled>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================= EDIT ACTIONS ================= -->
+
+                <div
+                    class="edit-actions"
+                    id="editActions"
+                    style="display: none;">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="cancelEdit()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="save-btn"
+                        onclick="saveProfile()">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 ACCOUNT STATUS
+                 ================================================= -->
+
+            <div class="card status-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Account Status
+                        </h2>
+
+                        <p>
+                            Current account verification
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- IDENTITY -->
+
+                <div class="status-item">
+
+                    <div
+                        class="status-icon green"
+                        id="identityStatusIcon">
+
+                        ✓
+
+                    </div>
+
+                    <div>
+
+                        <strong id="identityStatusTitle">
+                            Identity Verified
+                        </strong>
+
+                        <span id="identityStatusText">
+                            Verification completed
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MOBILE -->
+
+                <div class="status-item">
+
+                    <div
+                        class="status-icon green"
+                        id="mobileStatusIcon">
+
+                        ✓
+
+                    </div>
+
+                    <div>
+
+                        <strong id="mobileStatusTitle">
+                            Mobile Verified
+                        </strong>
+
+                        <span id="mobileStatusText">
+                            Registered mobile is protected
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACCOUNT -->
+
+                <div class="status-item">
+
+                    <div
+                        class="status-icon green"
+                        id="accountStatusIcon">
+
+                        ✓
+
+                    </div>
+
+                    <div>
+
+                        <strong id="accountStatusTitle">
+                            Account Active
+                        </strong>
+
+                        <span id="accountStatusText">
+                            No restrictions detected
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SECURITY LEVEL -->
+
+                <div class="security-level">
+
+                    <div class="security-level-top">
+
+                        <strong>
+                            Protection Level
+                        </strong>
+
+                        <span id="protectionLevel">
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <span
+                            id="protectionProgress"
+                            style="width: 0%;">
+
+                        </span>
+
+                    </div>
+
+
+                    <small>
+                        Your account is protected by SafePin security controls.
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 ACTIVITY STATISTICS
+                 ================================================= -->
+
+            <div class="card statistics-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Account Activity
+                        </h2>
+
+                        <p>
+                            Your SafePin activity overview
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="statistics">
+
+
+                    <!-- PROTECTED RECORDS -->
+
+                    <div class="stat">
+
+                        <div class="stat-icon maroon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <strong id="profileDocuments">
+                                0
+                            </strong>
+
+                            <span>
+                                Protected Records
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ACTIVE REQUESTS -->
+
+                    <div class="stat">
+
+                        <div class="stat-icon orange">
+                            ◷
+                        </div>
+
+                        <div>
+
+                            <strong id="profileRequests">
+                                0
+                            </strong>
+
+                            <span>
+                                Active Requests
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- VERIFICATION -->
+
+                    <div class="stat">
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <strong id="verificationPercentage">
+                                100%
+                            </strong>
+
+                            <span>
+                                Verification
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 NOTIFICATION PREFERENCES
+                 ================================================= -->
+
+            <div class="card preferences-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Notification Preferences
+                        </h2>
+
+                        <p>
+                            Choose the updates you want to receive.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SECURITY ALERTS -->
+
+                <div class="preference-row">
+
+                    <div class="preference-info">
+
+                        <div class="preference-icon">
+                            🔐
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Security Alerts
+                            </strong>
+
+                            <span>
+                                Receive important security notifications.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="securityToggle"
+                            checked
+                            onchange="savePreferences()">
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- REQUEST UPDATES -->
+
+                <div class="preference-row">
+
+                    <div class="preference-info">
+
+                        <div class="preference-icon">
+                            📋
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Request Updates
+                            </strong>
+
+                            <span>
+                                Get updates when a protection request changes status.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="requestToggle"
+                            checked
+                            onchange="savePreferences()">
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- SYSTEM NOTIFICATIONS -->
+
+                <div class="preference-row">
+
+                    <div class="preference-info">
+
+                        <div class="preference-icon">
+                            ⚙
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                System Notifications
+                            </strong>
+
+                            <span>
+                                Receive important SafePin system updates.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="systemToggle"
+                            checked
+                            onchange="savePreferences()">
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 SECURITY INFORMATION
+                 ================================================= -->
+
+            <div class="security-card">
+
+
+                <div class="security-icon">
+                    🔐
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Your information is protected
+                    </h3>
+
+                    <p>
+                        SafePin uses controlled access, secure communication
+                        and activity logging to protect account information.
+                    </p>
+
+                </div>
+
+
+                <a href="../Security/Security.html">
+
+                    Security Center →
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="Profile.js"></script>
+
+
+</body>
+
+</html>

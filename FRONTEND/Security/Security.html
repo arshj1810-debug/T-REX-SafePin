@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Security Center | SafePin</title>
+
+    <link rel="stylesheet" href="Security.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-box">
+                S
+            </div>
+
+            <div>
+                <h2>SafePin</h2>
+
+                <span>
+                    Secure Identity Portal
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- USER PROFILE -->
+
+        <div class="user-box">
+
+            <div
+                class="avatar"
+                id="sidebarProfileAvatar">
+                TR
+            </div>
+
+            <div>
+
+                <strong id="sidebarUserName">
+                    Loading...
+                </strong>
+
+                <small>
+                    Verified Nominee
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav>
+
+            <a href="../Dashboard/Dashboard.html">
+                <span>▣</span>
+                Dashboard
+            </a>
+
+
+            <a href="../Documents/Documents.html">
+                <span>▤</span>
+                Documents
+            </a>
+
+
+            <a href="../Request/Request.html">
+                <span>＋</span>
+                New Request
+            </a>
+
+
+            <a href="../Tracking/Tracking.html">
+                <span>◉</span>
+                Tracking
+            </a>
+
+
+            <a href="../Notifications/Notifications.html">
+                <span>🔔</span>
+                Notifications
+            </a>
+
+
+            <a href="../Profile/Profile.html">
+                <span>👤</span>
+                Profile
+            </a>
+
+
+            <a
+                href="Security.html"
+                class="active">
+
+                <span>🔐</span>
+                Security Center
+
+            </a>
+
+
+            <a href="../System/System.html">
+                <span>⚙</span>
+                System Overview
+            </a>
+
+
+            <a
+                href="../Login/Login.html"
+                onclick="logout(); return false;">
+
+                <span>⇥</span>
+                Logout
+
+            </a>
+
+        </nav>
+
+
+        <!-- SECURITY STATUS -->
+
+        <div class="secure-status">
+
+            <div class="status-dot"></div>
+
+            <div>
+
+                <strong id="systemSecurityStatus">
+                    System Secure
+                </strong>
+
+                <small id="systemSecurityMessage">
+                    Loading security status...
+                </small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Security Center
+                </h1>
+
+                <p>
+                    Monitor and manage your SafePin account security.
+                </p>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <span class="live">
+                    ● LIVE
+                </span>
+
+
+                <!-- TOP PROFILE -->
+
+                <div class="top-profile">
+
+                    <div
+                        class="small-avatar"
+                        id="topProfileInitials">
+
+                        TR
+
+                    </div>
+
+                    <span id="topProfileName">
+                        Loading...
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="content">
+
+
+            <!-- SECURITY HERO -->
+
+            <div class="security-hero">
+
+                <div class="shield">
+                    🔐
+                </div>
+
+
+                <div class="hero-text">
+
+                    <h2 id="securityHeroTitle">
+                        Checking account protection...
+                    </h2>
+
+                    <p id="securityHeroDescription">
+                        SafePin is checking the current security
+                        protection status of your account.
+                    </p>
+
+                </div>
+
+
+                <div class="protection-status">
+
+                    <span id="protectionStatus">
+                        ● Checking
+                    </span>
+
+                    <small id="protectionStatusText">
+                        Loading security status
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- SECURITY SCORE -->
+
+            <div class="score-card">
+
+                <div class="score-info">
+
+                    <h3>
+                        Security Score
+                    </h3>
+
+                    <p>
+                        Your current account protection level
+                    </p>
+
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-fill"
+                            id="securityProgress"
+                            style="width: 0%;">
+                        </div>
+
+                    </div>
+
+
+                    <span
+                        class="progress-text"
+                        id="securityProgressText">
+
+                        Checking protection status
+
+                    </span>
+
+                </div>
+
+
+                <div class="score">
+
+                    <strong id="securityScore">
+                        --
+                    </strong>
+
+                    <span>
+                        / 100
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= SECURITY CONTROLS ================= -->
+
+            <div class="section-title">
+
+                <h2>
+                    Security Controls
+                </h2>
+
+                <p>
+                    Current security configuration of your account.
+                </p>
+
+            </div>
+
+
+            <div class="controls-grid">
+
+
+                <!-- IDENTITY -->
+
+                <div class="control-card">
+
+                    <div class="control-icon green">
+                        ✓
+                    </div>
+
+                    <div class="control-info">
+
+                        <h3>
+                            Identity Verification
+                        </h3>
+
+                        <p>
+                            Your identity verification is handled
+                            during the authenticated login process.
+                        </p>
+
+                    </div>
+
+                    <span class="enabled">
+                        Enabled
+                    </span>
+
+                </div>
+
+
+                <!-- AUTHENTICATION -->
+
+                <div class="control-card">
+
+                    <div class="control-icon blue">
+                        🔑
+                    </div>
+
+                    <div class="control-info">
+
+                        <h3>
+                            Secure Authentication
+                        </h3>
+
+                        <p>
+                            Your account uses authenticated backend
+                            sessions for protected API access.
+                        </p>
+
+                    </div>
+
+                    <span class="enabled">
+                        Active
+                    </span>
+
+                </div>
+
+
+                <!-- ACTIVITY -->
+
+                <div class="control-card">
+
+                    <div class="control-icon purple">
+                        🛡
+                    </div>
+
+                    <div class="control-info">
+
+                        <h3>
+                            Activity Monitoring
+                        </h3>
+
+                        <p>
+                            Security-related account activity is
+                            recorded by the T-REX backend.
+                        </p>
+
+                    </div>
+
+                    <span class="enabled">
+                        Active
+                    </span>
+
+                </div>
+
+
+                <!-- NOTIFICATIONS -->
+
+                <div class="control-card">
+
+                    <div class="control-icon orange">
+                        🔔
+                    </div>
+
+                    <div class="control-info">
+
+                        <h3>
+                            Security Notifications
+                        </h3>
+
+                        <p>
+                            Important security events can be
+                            communicated through the notification system.
+                        </p>
+
+                    </div>
+
+                    <span class="enabled">
+                        Enabled
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= TWO COLUMN ================= -->
+
+            <div class="two-column">
+
+
+                <!-- LOGIN ACTIVITY -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Recent Login Activity
+                            </h3>
+
+                            <p>
+                                Current authenticated session
+                            </p>
+
+                        </div>
+
+                        <span class="safe-label">
+                            Secure
+                        </span>
+
+                    </div>
+
+
+                    <div class="login-item">
+
+                        <div class="login-icon">
+                            💻
+                        </div>
+
+                        <div class="login-info">
+
+                            <strong>
+                                Current Session
+                            </strong>
+
+                            <p>
+                                Browser Session
+                            </p>
+
+                            <small id="currentSessionStatus">
+                                Active
+                            </small>
+
+                        </div>
+
+                        <span class="current">
+                            Current
+                        </span>
+
+                    </div>
+
+
+                    <div class="login-item">
+
+                        <div class="login-icon">
+                            🌐
+                        </div>
+
+                        <div class="login-info">
+
+                            <strong>
+                                T-REX Web Application
+                            </strong>
+
+                            <p>
+                                Authenticated Browser
+                            </p>
+
+                            <small id="sessionTime">
+                                Current session
+                            </small>
+
+                        </div>
+
+                        <span class="safe">
+                            Safe
+                        </span>
+
+                    </div>
+
+
+                    <div class="login-item">
+
+                        <div class="login-icon">
+                            🔐
+                        </div>
+
+                        <div class="login-info">
+
+                            <strong>
+                                Backend Authentication
+                            </strong>
+
+                            <p>
+                                JWT protected API session
+                            </p>
+
+                            <small>
+                                Active
+                            </small>
+
+                        </div>
+
+                        <span class="safe">
+                            Safe
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SECURITY ALERTS -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Security Alerts
+                            </h3>
+
+                            <p>
+                                Current security events
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="alert-item"
+                        id="securityAlertProtection">
+
+                        <div class="alert-icon success">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <strong id="protectionAlertTitle">
+                                Checking protection
+                            </strong>
+
+                            <p id="protectionAlertMessage">
+                                Checking your current account
+                                protection status.
+                            </p>
+
+                            <small id="protectionAlertTime">
+                                Just now
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-item">
+
+                        <div class="alert-icon success">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Authentication active
+                            </strong>
+
+                            <p>
+                                Your current session is authenticated
+                                with the T-REX backend.
+                            </p>
+
+                            <small>
+                                Active
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-item">
+
+                        <div class="alert-icon info">
+                            🔐
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Security monitoring active
+                            </strong>
+
+                            <p>
+                                Your account security status is
+                                monitored through the Security Center.
+                            </p>
+
+                            <small>
+                                Active
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= ACCOUNT PROTECTION ================= -->
+
+            <div class="protection-card">
+
+                <div class="protection-icon">
+                    🛡
+                </div>
+
+
+                <div class="protection-content">
+
+                    <h3>
+                        Emergency Account Protection
+                    </h3>
+
+                    <p id="emergencyProtectionDescription">
+                        If you notice suspicious activity,
+                        you can temporarily protect your account.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="protect-btn"
+                    id="protectAccountButton"
+                    onclick="protectAccount()">
+
+                    Protect Account
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="Security.js"></script>
+
+</body>
+
+</html>
