@@ -1,4 +1,58 @@
+/*
+| T-REX / SafePin
+| Notification Controller
+|
+| Handles asynchronous PostgreSQL-backed notifications.
+*/
+
 const service = require('../services/notification.service');
-function list(req,res,next){try{res.json({success:true,notifications:service.list(req.user.sub)});}catch(e){next(e);}}
-function read(req,res,next){try{res.json({success:true,notification:service.markRead(req.user.sub,req.params.notificationId)});}catch(e){next(e);}}
-module.exports={list,read};
+
+/* ============================================================
+   LIST NOTIFICATIONS
+   ============================================================ */
+
+async function list(req, res, next) {
+    try {
+        const notifications =
+            await service.list(
+                req.user.sub
+            );
+
+        return res.json({
+            success: true,
+            notifications
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+/* ============================================================
+   MARK NOTIFICATION AS READ
+   ============================================================ */
+
+async function markRead(req, res, next) {
+    try {
+        const notification =
+            await service.markRead(
+                req.user.sub,
+                req.params.notificationId
+            );
+
+        return res.json({
+            success: true,
+            notification
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
+
+module.exports = {
+    list,
+    markRead
+};

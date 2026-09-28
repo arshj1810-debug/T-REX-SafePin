@@ -1,4 +1,82 @@
+/*
+| T-REX / SafePin
+| Document Controller
+|
+| Handles asynchronous PostgreSQL-backed document operations.
+*/
+
 const service = require('../services/document.service');
-function upload(req,res,next){ try { res.status(201).json({success:true,document:service.addDocument(req.user.sub,req.params.caseId,req.file)}); } catch(e){next(e);} }
-function list(req,res,next){ try { res.json({success:true,documents:service.listDocuments(req.user.sub,req.params.caseId)}); } catch(e){next(e);} }
-module.exports={upload,list};
+
+/* ============================================================
+   UPLOAD DOCUMENT
+   ============================================================ */
+
+async function upload(req, res, next) {
+    try {
+        const document =
+            await service.addDocument(
+                req.user.sub,
+                req.params.caseId,
+                req.file
+            );
+
+        return res.status(201).json({
+            success: true,
+            document
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+/* ============================================================
+   LIST DOCUMENTS
+   ============================================================ */
+
+async function list(req, res, next) {
+    try {
+        const documents =
+            await service.listDocuments(
+                req.user.sub,
+                req.params.caseId
+            );
+
+        return res.json({
+            success: true,
+            documents
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+/* ============================================================
+   GET DOCUMENT
+   ============================================================ */
+
+async function get(req, res, next) {
+    try {
+        const document =
+            await service.getDocument(
+                req.user.sub,
+                req.params.documentId
+            );
+
+        return res.json({
+            success: true,
+            document
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
+
+module.exports = {
+    upload,
+    list,
+    get
+};

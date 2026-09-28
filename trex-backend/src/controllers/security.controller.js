@@ -1,50 +1,118 @@
-const repo = require('../repositories/memory.repository');
+/*
+| T-REX / SafePin
+| Security Controller
+|
+| PostgreSQL-backed Emergency Protection management.
+*/
 
-function get(req, res, next) {
-  try {
-    const userId = req.user.sub;
-    const active = repo.protections.get(userId) === true;
+const repo = require('../repositories/postgres.repository');
 
-    res.json({
-      success: true,
-      active
-    });
-  } catch (e) {
-    next(e);
-  }
+/* ============================================================
+   GET PROTECTION STATUS
+   ============================================================ */
+
+async function get(req, res, next) {
+    try {
+        const protection =
+            await repo.getProtection(
+                req.user.sub
+            );
+
+        return res.json({
+            success: true,
+            active: protection.active
+        });
+    } catch (error) {
+        return next(error);
+    }
 }
 
-function activate(req, res, next) {
-  try {
-    const userId = req.user.sub;
+/* ============================================================
+   ACTIVATE EMERGENCY PROTECTION
+   ============================================================ */
 
-    repo.protections.set(userId, true);
+async function activate(req, res, next) {
+    try {
+        const userId =
+            req.user.sub;
 
-    repo.addAudit({
-      userId,
-      action: 'EMERGENCY_PROTECTION_ACTIVATED',
-      entityType: 'USER',
-      entityId: userId
-    });
+        const user =
+            await repo.findUserById(
+                userId
+            );
 
-    repo.addNotification(userId, {
-      type: 'security',
-      icon: '🛡️',
-      title: 'Emergency Protection Activated',
-      message: 'Your SafePin protection mode has been activated.',
-      priority: 'high'
-    });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found.'
+            });
+        }
 
-    res.json({
-      success: true,
-      active: true
-    });
-  } catch (e) {
-    next(e);
-  }
+        const protection =
+            await repo.setProtection(
+                userId,
+                true
+            );
+
+        await repo.addAudit({
+            id:
+                repo.randomId('audit'),
+
+            userId,
+
+            action:
+                'EMERGENCY_PROTECTION_ACTIVATED',
+
+            entityType:
+                'security_protection',
+
+            entityId:
+                userId,
+
+            metadata: {
+                active: true
+            }
+        });
+
+        await repo.addNotification({
+            notificationId:
+                repo.randomId('ntf'),
+
+            userId,
+
+            type:
+                'security',
+
+            icon:
+                '🛡️',
+
+            title:
+                'Emergency Protection Activated',
+
+            message:
+                'Your SafePin protection mode has been activated.',
+
+            priority:
+                'high',
+
+            read:
+                false
+        });
+
+        return res.json({
+            success: true,
+            active: protection.active
+        });
+    } catch (error) {
+        return next(error);
+    }
 }
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
 
 module.exports = {
-  get,
-  activate
+    get,
+    activate
 };

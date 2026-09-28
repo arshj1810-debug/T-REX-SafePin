@@ -1,99 +1,165 @@
-const repo = require('../repositories/memory.repository');
+/*
+| T-REX / SafePin
+| Profile Controller
+|
+| PostgreSQL-backed user profile management.
+*/
 
-function get(req, res, next) {
+const repo = require('../repositories/postgres.repository');
+
+/* ============================================================
+   GET PROFILE
+   ============================================================ */
+
+async function get(req, res, next) {
     try {
-        const user = repo.findUserById(req.user.sub);
+        const user =
+            await repo.findUserById(
+                req.user.sub
+            );
 
         if (!user) {
-            throw Object.assign(
-                new Error('User not found.'),
-                { status: 404 }
-            );
+            return res.status(404).json({
+                success: false,
+                message: 'User not found.'
+            });
         }
 
-        res.json({
+        return res.json({
             success: true,
             profile: user
         });
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        return next(error);
     }
 }
 
-function update(req, res, next) {
+/* ============================================================
+   UPDATE PROFILE
+   ============================================================ */
+
+async function update(req, res, next) {
     try {
-        const user = repo.findUserById(req.user.sub);
+        const userId =
+            req.user.sub;
 
-        if (!user) {
-            throw Object.assign(
-                new Error('User not found.'),
-                { status: 404 }
+        const body =
+            req.body || {};
+
+        const name =
+            repo.normalizeString(
+                body.name
             );
+
+        const email =
+            repo.normalizeString(
+                body.email
+            );
+
+        const phone =
+            repo.normalizePhone(
+                body.phone
+            );
+
+        if (!name) {
+            return res.status(400).json({
+                success: false,
+                message: 'Name is required.'
+            });
         }
 
-        if (req.body.name !== undefined) {
-            const name = String(req.body.name).trim();
-
-            if (!name) {
-                throw Object.assign(
-                    new Error('Name cannot be empty.'),
-                    { status: 400 }
-                );
-            }
-
-            if (name.length > 100) {
-                throw Object.assign(
-                    new Error('Name must be 100 characters or less.'),
-                    { status: 400 }
-                );
-            }
-
-            user.name = name;
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email is required.'
+            });
         }
 
-        if (req.body.email !== undefined) {
-            const email = String(req.body.email).trim();
-
-            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                throw Object.assign(
-                    new Error('Invalid email address.'),
-                    { status: 400 }
-                );
-            }
-
-            user.email = email;
+        if (!phone) {
+            return res.status(400).json({
+                success: false,
+                message: 'Phone number is required.'
+            });
         }
 
-        if (req.body.phone !== undefined) {
-            const phone = String(req.body.phone).trim();
+        const existingUser =
+            await repo.findUserById(
+                userId
+            );
 
-            if (phone.length > 30) {
-                throw Object.assign(
-                    new Error('Phone number is too long.'),
-                    { status: 400 }
-                );
-            }
-
-            user.phone = phone;
+        if (!existingUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found.'
+            });
         }
 
-        user.updatedAt = repo.now();
+        /*
+         * Prevent another account from using
+         * the same phone number.
+         */
+        const phoneUser =
+            await repo.findUserByPhone(
+                phone
+            );
 
-        repo.addAudit({
-            userId: user.id,
-            action: 'PROFILE_UPDATED',
-            entityType: 'USER',
-            entityId: user.id
+        if (
+            phoneUser &&
+            phoneUser.id !== userId
+        ) {
+            return res.status(409).json({
+                success: false,
+                message:
+                    'This phone number is already associated with another account.'
+            });
+        }
+
+        const updatedUser =
+            await repo.updateUser(
+                userId,
+                {
+                    name,
+                    email,
+                    phone
+                }
+            );
+
+        await repo.addAudit({
+            id:
+                repo.randomId('audit'),
+
+            userId,
+
+            action:
+                'PROFILE_UPDATED',
+
+            entityType:
+                'user',
+
+            entityId:
+                userId,
+
+            metadata: {
+                fields: [
+                    'name',
+                    'email',
+                    'phone'
+                ]
+            }
         });
 
-        res.json({
+        return res.json({
             success: true,
-            profile: user
+            profile: updatedUser
         });
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        return next(error);
     }
 }
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
 
 module.exports = {
     get,

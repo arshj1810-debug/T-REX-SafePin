@@ -1,29 +1,61 @@
+/*
+| T-REX / SafePin
+| Request Controller
+|
+| Handles asynchronous PostgreSQL-backed service requests.
+*/
+
 const service = require('../services/request.service');
 
-function list(req, res, next) {
+/* ============================================================
+   LIST REQUESTS
+   ============================================================ */
+
+async function list(req, res, next) {
     try {
-        res.json({
+        const requests =
+            await service.listRequests(
+                req.user.sub
+            );
+
+        return res.json({
             success: true,
-            requests: service.listRequests(req.user.sub)
+            requests
         });
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        return next(error);
     }
 }
 
-function get(req, res, next) {
+/* ============================================================
+   GET SINGLE REQUEST
+   ============================================================ */
+
+async function get(req, res, next) {
     try {
-        res.json({
-            success: true,
-            request: service.getRequest(
+        const request =
+            await service.getRequest(
                 req.user.sub,
                 req.params.requestId
-            )
+            );
+
+        return res.json({
+            success: true,
+            request
         });
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        return next(error);
     }
 }
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
+
+module.exports = {
+    list,
+    get
+};
 
 module.exports = {
     list,

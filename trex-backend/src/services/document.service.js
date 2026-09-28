@@ -1,83 +1,231 @@
-const repo = require('../repositories/memory.repository');
+/*
+| T-REX / SafePin
+| Document Service
+|
+| PostgreSQL-backed supporting-document management.
+*/
 
-function getAuthorizedCase(userId, caseId) {
-  const normalizedUserId = String(userId || '').trim();
-  const normalizedCaseId = String(caseId || '').trim();
-  const c = repo.cases.get(normalizedCaseId);
+const repo = require('../repositories/postgres.repository');
 
-  if (!c || String(c.userId) !== normalizedUserId) {
-    throw Object.assign(
-      new Error('Case not found.'),
-      { status: 404 }
-    );
-  }
+/* ============================================================
+   CASE AUTHORIZATION
+   ============================================================ */
 
-  return c;
-}
-
-function addDocument(userId, caseId, file) {
-  const c = getAuthorizedCase(userId, caseId);
-
-  if (!file) {
-    throw Object.assign(
-      new Error('File is required.'),
-      { status: 400 }
-    );
-  }
-
-  const document = {
-    documentId: repo.id('doc'),
-    caseId: c.caseId,
-    userId: String(userId),
-    originalName: file.originalname,
-    filename: file.filename,
-    mimeType: file.mimetype,
-    size: file.size,
-    status: 'UPLOADED',
-    statusLabel: 'Uploaded',
-    uploadedAt: repo.now()
-  };
-
-  repo.documents.set(document.documentId, document);
-
-  repo.addNotification(userId, {
-    type: 'request',
-    icon: '📎',
-    title: 'Supporting Document Uploaded',
-    message: `${document.originalName} was securely attached to Case ${c.caseId}.`,
-    caseId: c.caseId,
-    priority: 'normal'
-  });
-
-  repo.addAudit({
-    userId,
-    action: 'DOCUMENT_UPLOADED',
-    entityType: 'DOCUMENT',
-    entityId: document.documentId,
-    metadata: {
-      caseId: c.caseId,
-      originalName: document.originalName,
-      mimeType: document.mimeType,
-      size: document.size
+async function getAuthorizedCase(userId, caseId) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
     }
-  });
 
-  return document;
+    if (!caseId) {
+        throw Object.assign(
+            new Error('Case ID is required.'),
+            { status: 400 }
+        );
+    }
+
+    const requestedCase =
+        await repo.findCaseById(caseId);
+
+    if (
+        !requestedCase ||
+        requestedCase.userId !== userId
+    ) {
+        throw Object.assign(
+            new Error('Case not found.'),
+            { status: 404 }
+        );
+    }
+
+    return requestedCase;
 }
 
-function listDocuments(userId, caseId) {
-  getAuthorizedCase(userId, caseId);
+/* ============================================================
+   ADD DOCUMENT
+   ============================================================ */
 
-  return [...repo.documents.values()]
-    .filter(
-      d =>
-        d.caseId === String(caseId).trim() &&
-        String(d.userId) === String(userId).trim()
-    )
-    .sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
+async function addDocument(
+    userId,
+    caseId,
+    file
+) {
+    await getAuthorizedCase(
+        userId,
+        caseId
+    );
+
+    if (!file) {
+        throw Object.assign(
+            new Error(
+                'Supporting document is required.'
+            ),
+            { status: 400 }
+        );
+    }
+
+    const document =
+        await repo.createDocument({
+            documentId:
+                repo.randomId('doc'),
+
+            caseId,
+
+            userId,
+
+            originalName:
+                file.originalname,
+
+            filename:
+                file.filename,
+
+            mimeType:
+                file.mimetype,
+
+            size:
+                Number(file.size) || 0,
+
+            status:
+                'UPLOADED',
+
+            statusLabel:
+                'Uploaded'
+        });
+
+    /* --------------------------------------------------------
+       Notification
+       -------------------------------------------------------- */
+
+    await repo.addNotification({
+        notificationId:
+            repo.randomId('ntf'),
+
+        userId,
+
+        type:
+            'request',
+
+        icon:
+            '📎',
+
+        title:
+            'Supporting Document Uploaded',
+
+        message:
+            `Supporting document "${file.originalname}" ` +
+            `was uploaded for Case ID: ${caseId}`,
+
+        caseId,
+
+        priority:
+            'normal',
+
+        read:
+            false
+    });
+
+    /* --------------------------------------------------------
+       Audit log
+       -------------------------------------------------------- */
+
+    await repo.addAudit({
+        id:
+            repo.randomId('audit'),
+
+        userId,
+
+        action:
+            'DOCUMENT_UPLOADED',
+
+        entityType:
+            'document',
+
+        entityId:
+            document.documentId,
+
+        metadata: {
+            caseId,
+
+            originalName:
+                file.originalname,
+
+            mimeType:
+                file.mimetype,
+
+            size:
+                Number(file.size) || 0
+        }
+    });
+
+    return document;
 }
+
+/* ============================================================
+   LIST DOCUMENTS
+   ============================================================ */
+
+async function listDocuments(
+    userId,
+    caseId
+) {
+    await getAuthorizedCase(
+        userId,
+        caseId
+    );
+
+    return await repo.listDocumentsByCase(
+        caseId,
+        userId
+    );
+}
+
+/* ============================================================
+   GET DOCUMENT
+   ============================================================ */
+
+async function getDocument(
+    userId,
+    documentId
+) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
+    }
+
+    if (!documentId) {
+        throw Object.assign(
+            new Error('Document ID is required.'),
+            { status: 400 }
+        );
+    }
+
+    const document =
+        await repo.findDocumentById(
+            documentId
+        );
+
+    if (
+        !document ||
+        document.userId !== userId
+    ) {
+        throw Object.assign(
+            new Error('Document not found.'),
+            { status: 404 }
+        );
+    }
+
+    return document;
+}
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
 
 module.exports = {
-  addDocument,
-  listDocuments
+    addDocument,
+    listDocuments,
+    getDocument
 };

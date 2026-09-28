@@ -1,15 +1,55 @@
-const repo = require('../repositories/memory.repository');
+/*
+| T-REX / SafePin
+| Request Service
+|
+| PostgreSQL-backed service request management.
+*/
 
-function listRequests(userId) {
-    return [...repo.requests.values()]
-        .filter(request => request.userId === userId)
-        .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+const repo = require('../repositories/postgres.repository');
+
+/* ============================================================
+   LIST REQUESTS
+   ============================================================ */
+
+async function listRequests(userId) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
+    }
+
+    return repo.listRequestsByUser(userId);
 }
 
-function getRequest(userId, requestId) {
-    const request = repo.requests.get(requestId);
+/* ============================================================
+   GET SINGLE REQUEST
+   ============================================================ */
 
-    if (!request || request.userId !== userId) {
+async function getRequest(userId, requestId) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
+    }
+
+    if (!requestId) {
+        throw Object.assign(
+            new Error('Request ID is required.'),
+            { status: 400 }
+        );
+    }
+
+    const request =
+        await repo.findRequestById(
+            requestId
+        );
+
+    if (
+        !request ||
+        request.userId !== userId
+    ) {
         throw Object.assign(
             new Error('Request not found.'),
             { status: 404 }
@@ -18,6 +58,10 @@ function getRequest(userId, requestId) {
 
     return request;
 }
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
 
 module.exports = {
     listRequests,

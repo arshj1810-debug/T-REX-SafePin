@@ -1,12 +1,57 @@
-const repo = require('../repositories/memory.repository');
+/*
+| T-REX / SafePin
+| Notification Service
+|
+| PostgreSQL-backed notification management.
+*/
 
-function list(userId) {
-  return [...repo.notifications.values()].filter(n => n.userId === userId).sort((a,b) => b.createdAt.localeCompare(a.createdAt));
+const repo = require('../repositories/postgres.repository');
+
+/* ============================================================
+   LIST NOTIFICATIONS
+   ============================================================ */
+
+async function list(userId) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
+    }
+
+    return repo.listNotifications(userId);
 }
-function markRead(userId, notificationId) {
-  const n = repo.notifications.get(notificationId);
-  if (!n || n.userId !== userId) throw Object.assign(new Error('Notification not found.'), { status: 404 });
-  n.read = true;
-  return n;
+
+/* ============================================================
+   MARK NOTIFICATION AS READ
+   ============================================================ */
+
+async function markRead(userId, notificationId) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
+    }
+
+    if (!notificationId) {
+        throw Object.assign(
+            new Error('Notification ID is required.'),
+            { status: 400 }
+        );
+    }
+
+    return repo.markNotificationRead(
+        userId,
+        notificationId
+    );
 }
-module.exports = { list, markRead };
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
+
+module.exports = {
+    list,
+    markRead
+};

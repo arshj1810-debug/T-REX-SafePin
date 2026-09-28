@@ -11,20 +11,12 @@ const { notFound, errorHandler } = require('./middleware/error');
 // Environment
 // --------------------------------------------------
 
-const isVercel = Boolean(process.env.VERCEL);
-
 if (!process.env.JWT_SECRET) {
-    if (isVercel) {
-        console.warn(
-            'WARNING: JWT_SECRET is not configured in Vercel environment variables.'
-        );
-    } else {
-        process.env.JWT_SECRET = 'dev-only-secret-change-me';
+    process.env.JWT_SECRET = 'dev-only-secret-change-me';
 
-        console.warn(
-            'WARNING: JWT_SECRET is not set. Using development secret.'
-        );
-    }
+    console.warn(
+        'WARNING: JWT_SECRET is not set. Using development secret.'
+    );
 }
 
 // --------------------------------------------------
@@ -43,11 +35,17 @@ T-REX
 │   ├── Login
 │   ├── Dashboard
 │   ├── Documents
-│   └── ...
+│   ├── Request
+│   ├── Tracking
+│   ├── Notifications
+│   ├── Profile
+│   ├── Security
+│   └── System
 │
 └── trex-backend
-    └── src
-        └── server.js
+    ├── src
+    │   └── server.js
+    └── uploads
 */
 
 const frontendPath = path.resolve(
@@ -57,27 +55,14 @@ const frontendPath = path.resolve(
     'FRONTEND'
 );
 
-/*
-Vercel serverless functions cannot use the deployment
-filesystem as persistent writable storage.
-
-Local:
-    ./uploads
-
-Vercel:
-    /tmp/uploads
-
-IMPORTANT:
-Vercel /tmp storage is temporary and should not be treated
-as permanent document storage.
-*/
-
-const uploadsPath = isVercel
-    ? path.join('/tmp', 'trex-uploads')
-    : path.join(process.cwd(), 'uploads');
+const uploadsPath = path.resolve(
+    __dirname,
+    '..',
+    'uploads'
+);
 
 // --------------------------------------------------
-// Verify Frontend Directory
+// Verify Directories
 // --------------------------------------------------
 
 if (!fs.existsSync(frontendPath)) {
@@ -123,13 +108,6 @@ app.use(
 // Upload Directory
 // --------------------------------------------------
 
-/*
-Only create the directory when necessary.
-
-On Vercel this uses /tmp, which is writable during
-the lifetime of the serverless function.
-*/
-
 try {
     if (!fs.existsSync(uploadsPath)) {
         fs.mkdirSync(uploadsPath, {
@@ -156,9 +134,7 @@ app.get('/api/health', (req, res) => {
         success: true,
         service: 'T-REX backend',
         status: 'ok',
-        environment: isVercel
-            ? 'vercel'
-            : 'local',
+        environment: 'server',
         time: new Date().toISOString()
     });
 });
@@ -217,22 +193,19 @@ if (fs.existsSync(uploadsPath)) {
 // FRONTEND
 // --------------------------------------------------
 
-/*
-Serve the complete FRONTEND directory when it is
-available in the deployment package.
-*/
-
 if (fs.existsSync(frontendPath)) {
 
+    // Serve all frontend files
     app.use(
         express.static(frontendPath)
     );
 
     // --------------------------------------------------
-    // Login Page
+    // Home → Login
     // --------------------------------------------------
 
     app.get('/', (req, res) => {
+
         const loginPath = path.join(
             frontendPath,
             'Login',
@@ -250,17 +223,10 @@ if (fs.existsSync(frontendPath)) {
 
 } else {
 
-    /*
-    If Vercel did not package FRONTEND, return a useful
-    diagnostic instead of crashing the function.
-    */
-
     app.get('/', (req, res) => {
-        return res.status(500).json({
-            success: false,
-            error: 'FRONTEND directory is not available in the deployment.',
-            frontendPath
-        });
+        res.status(500).send(
+            'T-REX frontend directory was not found.'
+        );
     });
 }
 
@@ -273,47 +239,32 @@ app.use(notFound);
 app.use(errorHandler);
 
 // --------------------------------------------------
-// Local Server
+// Start Server
 // --------------------------------------------------
 
 const PORT = Number(
     process.env.PORT || 5000
 );
 
-/*
-Vercel imports this file as a serverless function.
+app.listen(
+    PORT,
+    '0.0.0.0',
+    () => {
 
-Therefore app.listen() must NOT run on Vercel.
-
-Locally:
-    npm run dev
-    or
-    npm start
-
-will still start the Express server normally.
-*/
-
-if (!isVercel && require.main === module) {
-
-    app.listen(PORT, () => {
-
+        console.log('');
+        console.log('======================================');
+        console.log('       T-REX / SafePin SERVER');
+        console.log('======================================');
         console.log(
-            `T-REX server running on http://localhost:${PORT}`
+            `Website: http://localhost:${PORT}/`
         );
-
         console.log(
-            `T-REX API available at http://localhost:${PORT}/api`
+            `API:     http://localhost:${PORT}/api`
         );
-
         console.log(
-            `T-REX website available at http://localhost:${PORT}/`
+            `Health:  http://localhost:${PORT}/api/health`
         );
-
-    });
-}
-
-// --------------------------------------------------
-// Vercel / Express Export
-// --------------------------------------------------
-
-module.exports = app;
+        console.log('======================================');
+        console.log('');
+    }
+);

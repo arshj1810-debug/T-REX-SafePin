@@ -2,7 +2,7 @@
    T-REX - NOTIFICATION SYSTEM
    Backend Connected Version
    Profile + Notifications Synchronized
-========================================================= */
+   ========================================================= */
 
 const API_BASE_URL = "/api";
 
@@ -13,58 +13,95 @@ let currentProfile = null;
 
 /* =========================================================
    AUTHENTICATION
-========================================================= */
+   ========================================================= */
 
 function getAuthToken() {
-    return sessionStorage.getItem("trexToken");
+
+    return sessionStorage.getItem(
+        "trexToken"
+    );
+
 }
 
 
 function redirectToLogin() {
-    sessionStorage.removeItem("trexToken");
-    sessionStorage.removeItem("trexVerificationId");
-    sessionStorage.removeItem("trexUserId");
 
-    window.location.href = "../Login/Login.html";
+    sessionStorage.removeItem(
+        "trexToken"
+    );
+
+    sessionStorage.removeItem(
+        "trexVerificationId"
+    );
+
+    sessionStorage.removeItem(
+        "trexUserId"
+    );
+
+    window.location.href =
+        "../Login/Login.html";
+
 }
 
 
 /* =========================================================
    API REQUEST
-========================================================= */
+   ========================================================= */
 
-async function apiRequest(endpoint, options = {}) {
+async function apiRequest(
+    endpoint,
+    options = {}
+) {
 
-    const token = getAuthToken();
+    const token =
+        getAuthToken();
+
 
     if (!token) {
-        console.warn("No T-REX authentication token found.");
+
+        console.warn(
+            "No T-REX authentication token found."
+        );
+
         redirectToLogin();
+
         return null;
+
     }
+
 
     const headers = {
         ...(options.headers || {}),
-        Authorization: `Bearer ${token}`
+        "Authorization":
+            `Bearer ${token}`
     };
+
 
     if (
         options.body &&
         !headers["Content-Type"]
     ) {
-        headers["Content-Type"] = "application/json";
+
+        headers["Content-Type"] =
+            "application/json";
+
     }
+
 
     let response;
 
+
     try {
-        response = await fetch(
-            `${API_BASE_URL}${endpoint}`,
-            {
-                ...options,
-                headers
-            }
-        );
+
+        response =
+            await fetch(
+                `${API_BASE_URL}${endpoint}`,
+                {
+                    ...options,
+                    headers
+                }
+            );
+
     } catch (error) {
 
         console.error(
@@ -75,7 +112,9 @@ async function apiRequest(endpoint, options = {}) {
         throw new Error(
             "Unable to connect to the T-REX backend."
         );
+
     }
+
 
     if (response.status === 401) {
 
@@ -84,16 +123,26 @@ async function apiRequest(endpoint, options = {}) {
         );
 
         redirectToLogin();
+
         return null;
+
     }
 
-    const text = await response.text();
+
+    const text =
+        await response.text();
+
 
     let result = {};
 
+
     if (text) {
+
         try {
-            result = JSON.parse(text);
+
+            result =
+                JSON.parse(text);
+
         } catch (error) {
 
             console.error(
@@ -104,26 +153,63 @@ async function apiRequest(endpoint, options = {}) {
             throw new Error(
                 "The backend returned an invalid response."
             );
+
         }
+
     }
+
 
     if (
         !response.ok ||
         result.success === false
     ) {
+
         throw new Error(
             result.message ||
             "Backend request failed."
         );
+
     }
 
+
     return result;
+
+}
+
+
+/* =========================================================
+   NOTIFICATION ID
+   =========================================================
+
+   Backend uses notificationId.
+   Older frontend versions may use id.
+
+   This helper keeps both formats compatible.
+   ========================================================= */
+
+function getNotificationId(
+    notification
+) {
+
+    if (!notification) {
+
+        return "";
+
+    }
+
+
+    return String(
+        notification.notificationId ||
+        notification.id ||
+        ""
+    ).trim();
+
 }
 
 
 /* =========================================================
    PROFILE
-========================================================= */
+   ========================================================= */
 
 async function loadProfile() {
 
@@ -133,18 +219,26 @@ async function loadProfile() {
             "Loading T-REX profile for Notifications page..."
         );
 
+
         const result =
-            await apiRequest("/profile");
+            await apiRequest(
+                "/profile"
+            );
+
 
         if (!result) {
+
             return;
+
         }
+
 
         currentProfile =
             result.user ||
             result.profile ||
             result.data ||
             null;
+
 
         if (!currentProfile) {
 
@@ -153,12 +247,15 @@ async function loadProfile() {
             );
 
             return;
+
         }
+
 
         console.log(
             "T-REX notification profile loaded:",
             currentProfile
         );
+
 
         updateProfileUI();
 
@@ -168,46 +265,64 @@ async function loadProfile() {
             "Failed to load T-REX profile:",
             error
         );
+
     }
+
 }
 
 
 /* =========================================================
    PROFILE UI
-========================================================= */
+   ========================================================= */
 
-function getInitials(name) {
+function getInitials(
+    name
+) {
 
     const value =
-        String(name || "").trim();
+        String(
+            name || ""
+        ).trim();
+
 
     if (!value) {
+
         return "TR";
+
     }
+
 
     const parts =
         value
             .split(/\s+/)
             .filter(Boolean);
 
+
     if (parts.length === 1) {
+
         return parts[0]
             .substring(0, 2)
             .toUpperCase();
+
     }
+
 
     return (
         parts[0][0] +
         parts[parts.length - 1][0]
     ).toUpperCase();
+
 }
 
 
 function updateProfileUI() {
 
     if (!currentProfile) {
+
         return;
+
     }
+
 
     const name =
         String(
@@ -217,21 +332,26 @@ function updateProfileUI() {
             "Verified Requester"
         ).trim();
 
+
     const initials =
         getInitials(name);
 
 
     /* =====================================================
        SIDEBAR PROFILE
-    ===================================================== */
+       ===================================================== */
 
     const sidebarName =
         document.getElementById(
             "notificationsProfileName"
         );
 
+
     if (sidebarName) {
-        sidebarName.textContent = name;
+
+        sidebarName.textContent =
+            name;
+
     }
 
 
@@ -240,22 +360,30 @@ function updateProfileUI() {
             "notificationsProfileAvatar"
         );
 
+
     if (sidebarAvatar) {
-        sidebarAvatar.textContent = initials;
+
+        sidebarAvatar.textContent =
+            initials;
+
     }
 
 
     /* =====================================================
        TOPBAR PROFILE
-    ===================================================== */
+       ===================================================== */
 
     const topName =
         document.getElementById(
             "notificationsTopProfileName"
         );
 
+
     if (topName) {
-        topName.textContent = name;
+
+        topName.textContent =
+            name;
+
     }
 
 
@@ -264,38 +392,52 @@ function updateProfileUI() {
             "notificationsTopProfileAvatar"
         );
 
+
     if (topAvatar) {
-        topAvatar.textContent = initials;
+
+        topAvatar.textContent =
+            initials;
+
     }
 
 
     /* =====================================================
        FALLBACK / GENERIC PROFILE SELECTORS
-       Keeps compatibility with older HTML versions.
-    ===================================================== */
+       ===================================================== */
 
     document
         .querySelectorAll(
             ".user strong, .profile-mini strong, .user-profile strong"
         )
-        .forEach(element => {
-            element.textContent = name;
-        });
+        .forEach(
+            element => {
+
+                element.textContent =
+                    name;
+
+            }
+        );
 
 
     document
         .querySelectorAll(
             ".avatar, .profile-avatar"
         )
-        .forEach(element => {
-            element.textContent = initials;
-        });
+        .forEach(
+            element => {
+
+                element.textContent =
+                    initials;
+
+            }
+        );
+
 }
 
 
 /* =========================================================
    LOAD NOTIFICATIONS
-========================================================= */
+   ========================================================= */
 
 async function loadNotifications() {
 
@@ -305,14 +447,19 @@ async function loadNotifications() {
             "Loading T-REX notifications..."
         );
 
+
         const result =
             await apiRequest(
                 "/notifications"
             );
 
+
         if (!result) {
+
             return;
+
         }
+
 
         notifications =
             Array.isArray(
@@ -321,10 +468,32 @@ async function loadNotifications() {
                 ? result.notifications
                 : [];
 
+
+        /*
+         * Normalize the notification ID so the rest
+         * of the frontend always has access to it.
+         */
+
+        notifications =
+            notifications.map(
+                notification => ({
+
+                    ...notification,
+
+                    notificationId:
+                        getNotificationId(
+                            notification
+                        )
+
+                })
+            );
+
+
         console.log(
             "T-REX notifications loaded:",
             notifications
         );
+
 
         renderNotifications(
             currentFilter
@@ -337,38 +506,50 @@ async function loadNotifications() {
             error
         );
 
+
         notifications = [];
+
 
         renderNotifications(
             currentFilter
         );
 
+
         showBackendError(
             error.message
         );
+
     }
+
 }
 
 
 /* =========================================================
    RENDER NOTIFICATIONS
-========================================================= */
+   ========================================================= */
 
-function renderNotifications(filter = "all") {
+function renderNotifications(
+    filter = "all"
+) {
 
     const list =
         document.getElementById(
             "notificationList"
         );
 
+
     const empty =
         document.getElementById(
             "emptyState"
         );
 
+
     if (!list || !empty) {
+
         return;
+
     }
+
 
     let filtered =
         [...notifications];
@@ -383,6 +564,7 @@ function renderNotifications(filter = "all") {
                 item =>
                     item.read !== true
             );
+
     }
 
 
@@ -397,6 +579,7 @@ function renderNotifications(filter = "all") {
                 item =>
                     item.type === filter
             );
+
     }
 
 
@@ -406,14 +589,18 @@ function renderNotifications(filter = "all") {
 
         list.innerHTML = "";
 
-        empty.style.display = "block";
+        empty.style.display =
+            "block";
 
         updateStatistics();
 
         return;
+
     }
 
-    empty.style.display = "none";
+
+    empty.style.display =
+        "none";
 
 
     /* ================= SORT ================= */
@@ -426,7 +613,9 @@ function renderNotifications(filter = "all") {
                 return a.read
                     ? 1
                     : -1;
+
             }
+
 
             return (
                 new Date(
@@ -436,6 +625,7 @@ function renderNotifications(filter = "all") {
                     a.createdAt || 0
                 )
             );
+
         }
     );
 
@@ -454,32 +644,45 @@ function renderNotifications(filter = "all") {
 
 
     updateStatistics();
+
 }
 
 
 /* =========================================================
    CREATE NOTIFICATION CARD
-========================================================= */
+   ========================================================= */
 
-function createNotificationHTML(notification) {
+function createNotificationHTML(
+    notification
+) {
+
+    const notificationId =
+        getNotificationId(
+            notification
+        );
+
 
     const unreadClass =
         notification.read
             ? "read"
             : "unread";
 
+
     const priority =
         notification.priority ||
         "normal";
 
+
     const priorityText =
         priority.toUpperCase();
+
 
     const icon =
         notification.icon ||
         getNotificationIcon(
             notification.type
         );
+
 
     const caseHTML =
         notification.caseId
@@ -492,10 +695,12 @@ function createNotificationHTML(notification) {
             `
             : "";
 
+
     const time =
         formatNotificationTime(
             notification
         );
+
 
     const title =
         escapeHTML(
@@ -503,24 +708,49 @@ function createNotificationHTML(notification) {
             "Notification"
         );
 
+
     const message =
         escapeHTML(
             notification.message ||
             ""
         );
 
-    return `
 
+    /*
+     * Do not create a read button with an undefined ID.
+     */
+
+    const readButton =
+        notificationId
+            ? `
+                <button
+                    class="read-btn"
+                    onclick="toggleRead('${escapeJS(
+                        notificationId
+                    )}')"
+                >
+                    ${
+                        notification.read
+                            ? "Mark unread"
+                            : "Mark as read"
+                    }
+                </button>
+            `
+            : "";
+
+
+    return `
         <div
             class="notification-card ${unreadClass}"
             data-id="${escapeHTML(
-                notification.id
+                notificationId
             )}"
         >
 
             <div
                 class="notification-icon ${escapeHTML(
-                    notification.type || "system"
+                    notification.type ||
+                    "system"
                 )}"
             >
                 ${icon}
@@ -574,82 +804,99 @@ function createNotificationHTML(notification) {
                         : ""
                 }
 
-
-                <button
-                    class="read-btn"
-                    onclick="toggleRead('${escapeJS(
-                        notification.id
-                    )}')"
-                >
-
-                    ${
-                        notification.read
-                            ? "Mark unread"
-                            : "Mark as read"
-                    }
-
-                </button>
+                ${readButton}
 
             </div>
 
         </div>
-
     `;
+
 }
 
 
 /* =========================================================
    NOTIFICATION ICON
-========================================================= */
+   ========================================================= */
 
-function getNotificationIcon(type) {
+function getNotificationIcon(
+    type
+) {
 
     const icons = {
-        request: "📋",
-        success: "✓",
-        security: "🔐",
-        system: "⚙"
+
+        request:
+            "📋",
+
+        success:
+            "✓",
+
+        security:
+            "🔐",
+
+        system:
+            "⚙"
+
     };
+
 
     return (
         icons[type] ||
         "🔔"
     );
+
 }
 
 
 /* =========================================================
    READ / UNREAD
-========================================================= */
+   ========================================================= */
 
-async function toggleRead(notificationId) {
+async function toggleRead(
+    notificationId
+) {
+
+    const normalizedId =
+        String(
+            notificationId || ""
+        ).trim();
+
+
+    if (!normalizedId) {
+
+        console.warn(
+            "Cannot mark notification as read: missing notification ID."
+        );
+
+        return;
+
+    }
+
 
     const notification =
         notifications.find(
             item =>
-                String(item.id) ===
-                String(notificationId)
+                getNotificationId(
+                    item
+                ) === normalizedId
         );
+
 
     if (!notification) {
 
         console.warn(
             "Notification not found:",
-            notificationId
+            normalizedId
         );
 
         return;
+
     }
 
 
     /*
-       Current backend provides the
-       "mark as read" endpoint.
-
-       An already-read notification
-       cannot currently be changed back
-       to unread from the backend.
-    */
+     * Current backend provides the
+     * "mark as read" endpoint.
+     */
 
     if (notification.read) {
 
@@ -658,6 +905,7 @@ async function toggleRead(notificationId) {
         );
 
         return;
+
     }
 
 
@@ -666,38 +914,57 @@ async function toggleRead(notificationId) {
         const result =
             await apiRequest(
                 `/notifications/${encodeURIComponent(
-                    notification.id
+                    normalizedId
                 )}/read`,
                 {
                     method: "PATCH"
                 }
             );
 
+
         if (!result) {
+
             return;
+
         }
 
 
         if (result.notification) {
 
+            const updatedNotification =
+                {
+                    ...result.notification,
+
+                    notificationId:
+                        getNotificationId(
+                            result.notification
+                        )
+
+                };
+
+
             const index =
                 notifications.findIndex(
                     item =>
-                        String(item.id) ===
-                        String(
-                            result.notification.id
-                        )
+                        getNotificationId(
+                            item
+                        ) ===
+                        normalizedId
                 );
+
 
             if (index !== -1) {
 
                 notifications[index] =
-                    result.notification;
+                    updatedNotification;
+
             }
 
         } else {
 
-            notification.read = true;
+            notification.read =
+                true;
+
         }
 
 
@@ -712,17 +979,20 @@ async function toggleRead(notificationId) {
             error
         );
 
+
         alert(
             error.message ||
             "Unable to update notification."
         );
+
     }
+
 }
 
 
 /* =========================================================
    MARK ALL AS READ
-========================================================= */
+   ========================================================= */
 
 async function markAllRead() {
 
@@ -732,31 +1002,76 @@ async function markAllRead() {
                 notification.read !== true
         );
 
+
     if (unread.length === 0) {
+
         return;
+
     }
+
+
+    /*
+     * Only send requests for notifications
+     * that actually have a valid backend ID.
+     */
+
+    const validUnread =
+        unread.filter(
+            notification =>
+                Boolean(
+                    getNotificationId(
+                        notification
+                    )
+                )
+        );
+
+
+    if (validUnread.length === 0) {
+
+        console.warn(
+            "No unread notifications have a valid notification ID."
+        );
+
+        return;
+
+    }
+
 
     try {
 
+        console.log(
+            `Marking ${validUnread.length} notification(s) as read...`
+        );
+
+
         await Promise.all(
-            unread.map(
-                notification =>
-                    apiRequest(
+            validUnread.map(
+                notification => {
+
+                    const notificationId =
+                        getNotificationId(
+                            notification
+                        );
+
+
+                    return apiRequest(
                         `/notifications/${encodeURIComponent(
-                            notification.id
+                            notificationId
                         )}/read`,
                         {
                             method: "PATCH"
                         }
-                    )
+                    );
+
+                }
             )
         );
 
 
         /*
-           Reload from backend so the page
-           always reflects actual server state.
-        */
+         * Reload from backend so the page
+         * reflects actual server state.
+         */
 
         await loadNotifications();
 
@@ -767,33 +1082,34 @@ async function markAllRead() {
             error
         );
 
+
         alert(
             error.message ||
             "Unable to mark all notifications as read."
         );
+
     }
+
 }
 
 
 /* =========================================================
    CLEAR READ
-========================================================= */
+   ========================================================= */
 
 function clearReadNotifications() {
 
     /*
-       There is currently no backend endpoint
-       for permanently deleting notifications.
-
-       Do not remove them locally because that
-       would make the UI disagree with the backend.
-    */
+     * There is currently no backend endpoint
+     * for permanently deleting notifications.
+     */
 
     const readCount =
         notifications.filter(
             notification =>
                 notification.read === true
         ).length;
+
 
     if (readCount === 0) {
 
@@ -802,17 +1118,20 @@ function clearReadNotifications() {
         );
 
         return;
+
     }
+
 
     alert(
         "Read notifications are retained in the T-REX audit history. A delete endpoint is not enabled in the current backend."
     );
+
 }
 
 
 /* =========================================================
    FILTER
-========================================================= */
+   ========================================================= */
 
 function filterNotifications(
     filter,
@@ -821,6 +1140,7 @@ function filterNotifications(
 
     currentFilter =
         filter;
+
 
     document
         .querySelectorAll(
@@ -833,27 +1153,32 @@ function filterNotifications(
                 )
         );
 
+
     if (button) {
 
         button.classList.add(
             "active"
         );
+
     }
+
 
     renderNotifications(
         filter
     );
+
 }
 
 
 /* =========================================================
    STATISTICS
-========================================================= */
+   ========================================================= */
 
 function updateStatistics() {
 
     const total =
         notifications.length;
+
 
     const unread =
         notifications.filter(
@@ -861,11 +1186,13 @@ function updateStatistics() {
                 item.read !== true
         ).length;
 
+
     const security =
         notifications.filter(
             item =>
                 item.type === "security"
         ).length;
+
 
     const requests =
         notifications.filter(
@@ -879,30 +1206,36 @@ function updateStatistics() {
             "totalCount"
         );
 
+
     const unreadCount =
         document.getElementById(
             "unreadCount"
         );
+
 
     const pendingCount =
         document.getElementById(
             "pendingCount"
         );
 
+
     const securityCount =
         document.getElementById(
             "securityCount"
         );
+
 
     const requestCount =
         document.getElementById(
             "requestCount"
         );
 
+
     const allBadge =
         document.getElementById(
             "allBadge"
         );
+
 
     const unreadBadge =
         document.getElementById(
@@ -911,38 +1244,63 @@ function updateStatistics() {
 
 
     if (totalCount) {
-        totalCount.textContent = total;
+
+        totalCount.textContent =
+            total;
+
     }
+
 
     if (unreadCount) {
-        unreadCount.textContent = unread;
+
+        unreadCount.textContent =
+            unread;
+
     }
+
 
     /*
-       "Pending" currently represents
-       unread notifications because the
-       backend does not have a separate
-       pending-notification state.
-    */
+     * "Pending" currently represents
+     * unread notifications.
+     */
 
     if (pendingCount) {
-        pendingCount.textContent = unread;
+
+        pendingCount.textContent =
+            unread;
+
     }
+
 
     if (securityCount) {
-        securityCount.textContent = security;
+
+        securityCount.textContent =
+            security;
+
     }
+
 
     if (requestCount) {
-        requestCount.textContent = requests;
+
+        requestCount.textContent =
+            requests;
+
     }
+
 
     if (allBadge) {
-        allBadge.textContent = total;
+
+        allBadge.textContent =
+            total;
+
     }
 
+
     if (unreadBadge) {
-        unreadBadge.textContent = unread;
+
+        unreadBadge.textContent =
+            unread;
+
     }
 
 
@@ -953,13 +1311,18 @@ function updateStatistics() {
             "sideCount"
         );
 
+
     if (!sideCount) {
+
         return;
+
     }
+
 
     if (unread === 0) {
 
-        sideCount.textContent = "";
+        sideCount.textContent =
+            "";
 
         sideCount.style.display =
             "none";
@@ -971,39 +1334,47 @@ function updateStatistics() {
 
         sideCount.style.display =
             "flex";
+
     }
+
 }
 
 
 /* =========================================================
    REFRESH
-========================================================= */
+   ========================================================= */
 
-async function refreshNotifications(button) {
+async function refreshNotifications(
+    button
+) {
 
     if (!button) {
+
         return;
+
     }
+
 
     const oldText =
         button.textContent;
 
+
     button.textContent =
         "↻ Refreshing...";
 
-    button.disabled = true;
+
+    button.disabled =
+        true;
+
 
     try {
 
-        /*
-           Refresh both profile and
-           notification data so the page
-           stays synchronized with backend.
-        */
-
         await Promise.all([
+
             loadProfile(),
+
             loadNotifications()
+
         ]);
 
     } catch (error) {
@@ -1018,14 +1389,17 @@ async function refreshNotifications(button) {
         button.textContent =
             oldText;
 
-        button.disabled = false;
+        button.disabled =
+            false;
+
     }
+
 }
 
 
 /* =========================================================
    LOGOUT
-========================================================= */
+   ========================================================= */
 
 function logout() {
 
@@ -1055,37 +1429,40 @@ function logout() {
     );
 
 
-    /*
-       Explicitly return to login page.
-    */
-
     window.location.href =
         "../Login/Login.html";
+
 }
 
 
 /* =========================================================
    BACKEND ERROR DISPLAY
-========================================================= */
+   ========================================================= */
 
-function showBackendError(message) {
+function showBackendError(
+    message
+) {
 
     const list =
         document.getElementById(
             "notificationList"
         );
 
+
     const empty =
         document.getElementById(
             "emptyState"
         );
 
+
     if (!list || !empty) {
+
         return;
+
     }
 
-    list.innerHTML = `
 
+    list.innerHTML = `
         <div
             class="notification-card unread"
         >
@@ -1095,7 +1472,6 @@ function showBackendError(message) {
             >
                 ⚠
             </div>
-
 
             <div class="notification-body">
 
@@ -1107,7 +1483,6 @@ function showBackendError(message) {
 
                 </div>
 
-
                 <p>
                     ${escapeHTML(
                         message ||
@@ -1118,17 +1493,18 @@ function showBackendError(message) {
             </div>
 
         </div>
-
     `;
+
 
     empty.style.display =
         "none";
+
 }
 
 
 /* =========================================================
    TIME FORMATTER
-========================================================= */
+   ========================================================= */
 
 function formatNotificationTime(
     notification
@@ -1141,6 +1517,7 @@ function formatNotificationTime(
                 notification.createdAt
             );
 
+
         if (
             !Number.isNaN(
                 date.getTime()
@@ -1150,23 +1527,30 @@ function formatNotificationTime(
             const now =
                 new Date();
 
+
             const difference =
                 now.getTime() -
                 date.getTime();
+
 
             const seconds =
                 Math.floor(
                     difference / 1000
                 );
 
+
             if (seconds < 60) {
+
                 return "Just now";
+
             }
+
 
             const minutes =
                 Math.floor(
                     seconds / 60
                 );
+
 
             if (minutes < 60) {
 
@@ -1175,12 +1559,15 @@ function formatNotificationTime(
                         ? ""
                         : "s"
                 } ago`;
+
             }
+
 
             const hours =
                 Math.floor(
                     minutes / 60
                 );
+
 
             if (hours < 24) {
 
@@ -1189,30 +1576,42 @@ function formatNotificationTime(
                         ? ""
                         : "s"
                 } ago`;
+
             }
+
 
             const days =
                 Math.floor(
                     hours / 24
                 );
 
+
             if (days === 1) {
+
                 return "Yesterday";
+
             }
 
+
             return `${days} days ago`;
+
         }
+
     }
 
+
     return "Recently";
+
 }
 
 
 /* =========================================================
    HTML ESCAPING
-========================================================= */
+   ========================================================= */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
     return String(
         value ?? ""
@@ -1237,14 +1636,17 @@ function escapeHTML(value) {
             /'/g,
             "&#039;"
         );
+
 }
 
 
 /* =========================================================
    JAVASCRIPT STRING ESCAPING
-========================================================= */
+   ========================================================= */
 
-function escapeJS(value) {
+function escapeJS(
+    value
+) {
 
     return String(
         value ?? ""
@@ -1261,12 +1663,13 @@ function escapeJS(value) {
             /"/g,
             '\\"'
         );
+
 }
 
 
 /* =========================================================
    INITIALIZE
-========================================================= */
+   ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -1278,19 +1681,23 @@ document.addEventListener(
 
 
         /*
-           Load profile and notifications
-           from the same authenticated backend
-           session.
-        */
+         * Load profile and notifications
+         * from the same authenticated backend
+         * session.
+         */
 
         await Promise.all([
+
             loadProfile(),
+
             loadNotifications()
+
         ]);
 
 
         console.log(
             "T-REX Notifications page loaded successfully."
         );
+
     }
 );

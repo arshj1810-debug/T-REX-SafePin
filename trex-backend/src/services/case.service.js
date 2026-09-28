@@ -1,238 +1,318 @@
-const repo = require('../repositories/memory.repository');
+/*
+| T-REX / SafePin
+| Case Service
+|
+| PostgreSQL-backed case management.
+*/
+
+const repo = require('../repositories/postgres.repository');
+
+/* ============================================================
+   CONSTANTS
+   ============================================================ */
 
 const VALID_ACTIONS = new Set([
-  'Deactivate',
-  'Freeze',
-  'Update',
-  'Other'
+    'Deactivate',
+    'Freeze',
+    'Update',
+    'Other'
 ]);
 
-function normalizeCaseId(value) {
-  return String(value || '').trim();
-}
-
-function normalizeAction(value) {
-  const action = String(value || '').trim();
-
-  const aliases = {
+const ACTION_ALIASES = {
     'Protection / Deactivation': 'Deactivate',
     'Freeze / Hold': 'Freeze',
     'Update Details': 'Update',
     'Other / Query': 'Other'
-  };
+};
 
-  return aliases[action] || action;
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+function normalizeAction(action) {
+    const value = repo.normalizeString(action);
+
+    return ACTION_ALIASES[value] || value;
 }
 
-function createCase(userId, payload = {}) {
-  const normalizedUserId = String(userId || '').trim();
+/*
+|--------------------------------------------------------------------------
+| Build initial case timeline
+|--------------------------------------------------------------------------
+|
+| IMPORTANT:
+| Tracking.js expects the progress field to be named `step`.
+|
+| Example:
+| {
+|     status: 'SUBMITTED',
+|     step: 'COMPLETED'
+| }
+|
+| The previous version used `state`, which caused the frontend
+| to treat every timeline item as PENDING.
+|
+*/
 
-  if (!normalizedUserId) {
-    throw Object.assign(
-      new Error('Authenticated user is required.'),
-      { status: 401 }
+function buildTimeline() {
+    const timestamp = repo.now();
+
+    return [
+        {
+            status: 'SUBMITTED',
+            title: 'Request Submitted',
+            step: 'COMPLETED',
+            timestamp
+        },
+        {
+            status: 'VERIFICATION',
+            title: 'Verification Officer Review',
+            step: 'IN_PROGRESS',
+            timestamp
+        },
+        {
+            status: 'DEPARTMENT',
+            title: 'Sent to Concerned Department',
+            step: 'PENDING',
+            timestamp
+        },
+        {
+            status: 'ACTION',
+            title: 'Department Action',
+            step: 'PENDING',
+            timestamp
+        },
+        {
+            status: 'APPROVAL',
+            title: 'Final Approval',
+            step: 'PENDING',
+            timestamp
+        },
+        {
+            status: 'CLOSED',
+            title: 'Case Closed',
+            step: 'PENDING',
+            timestamp
+        }
+    ];
+}
+
+/* ============================================================
+   CREATE CASE
+   ============================================================ */
+
+async function createCase(userId, payload = {}) {
+    const documentName = repo.normalizeString(
+        payload.documentName ||
+        payload.service ||
+        payload.document
     );
-  }
 
-  const documentName = String(
-    payload.service || payload.documentName || ''
-  ).trim();
-
-  const action = normalizeAction(payload.action);
-  const reason = String(payload.reason || '').trim();
-
-  if (!documentName) {
-    throw Object.assign(
-      new Error('Document/service is required.'),
-      { status: 400 }
+    const action = normalizeAction(
+        payload.action
     );
-  }
 
-  if (!VALID_ACTIONS.has(action)) {
-    throw Object.assign(
-      new Error('Invalid action.'),
-      { status: 400 }
+    const reason = repo.normalizeString(
+        payload.reason
     );
-  }
 
-  if (!reason) {
-    throw Object.assign(
-      new Error('Reason is required.'),
-      { status: 400 }
-    );
-  }
-
-  if (reason.length > 1000) {
-    throw Object.assign(
-      new Error('Reason must be 1000 characters or less.'),
-      { status: 400 }
-    );
-  }
-
-  const cid = normalizeCaseId(repo.caseId());
-  const timestamp = repo.now();
-
-  if (!cid) {
-    throw Object.assign(
-      new Error('Unable to generate a Case ID.'),
-      { status: 500 }
-    );
-  }
-
-  const c = {
-    caseId: cid,
-    userId: normalizedUserId,
-    documentName,
-    action,
-    reason,
-    status: 'UNDER_VERIFICATION',
-    statusLabel: 'Under Verification',
-    createdAt: timestamp,
-    updatedAt: timestamp,
-    timeline: [
-      {
-        step: 1,
-        key: 'SUBMITTED',
-        title: 'Request Submitted',
-        status: 'COMPLETED',
-        timestamp
-      },
-      {
-        step: 2,
-        key: 'VERIFICATION',
-        title: 'Verification Officer Review',
-        status: 'IN_PROGRESS',
-        timestamp: null
-      },
-      {
-        step: 3,
-        key: 'DEPARTMENT',
-        title: 'Sent to Concerned Department',
-        status: 'PENDING',
-        timestamp: null
-      },
-      {
-        step: 4,
-        key: 'ACTION',
-        title: 'Department Action',
-        status: 'PENDING',
-        timestamp: null
-      },
-      {
-        step: 5,
-        key: 'APPROVAL',
-        title: 'Final Approval',
-        status: 'PENDING',
-        timestamp: null
-      },
-      {
-        step: 6,
-        key: 'CLOSED',
-        title: 'Case Closed',
-        status: 'PENDING',
-        timestamp: null
-      }
-    ]
-  };
-
-  repo.cases.set(cid, c);
-
-  if (!repo.cases.has(cid)) {
-    throw Object.assign(
-      new Error('Case was created but could not be stored.'),
-      { status: 500 }
-    );
-  }
-
-  const request = {
-    requestId: repo.id('req'),
-    caseId: cid,
-    userId: normalizedUserId,
-    service: documentName,
-    action,
-    status: 'UNDER_VERIFICATION',
-    statusLabel: 'Under Verification',
-    createdAt: timestamp,
-    updatedAt: timestamp
-  };
-
-  repo.requests.set(request.requestId, request);
-
-  repo.addNotification(normalizedUserId, {
-    type: 'request',
-    icon: '📋',
-    title: 'Protection Request Submitted',
-    message:
-      `Your ${action} request for ${documentName} has been submitted and is under verification.`,
-    caseId: cid,
-    priority: 'normal'
-  });
-
-  repo.addAudit({
-    userId: normalizedUserId,
-    action: 'CASE_CREATED',
-    entityType: 'CASE',
-    entityId: cid,
-    metadata: {
-      service: documentName,
-      action
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
     }
-  });
 
-  console.log('T-REX CASE CREATED:', {
-    caseId: cid,
-    userId: normalizedUserId,
-    service: documentName,
-    action,
-    repositoryCaseCount: repo.cases.size
-  });
+    if (!documentName) {
+        throw Object.assign(
+            new Error('Document/service is required.'),
+            { status: 400 }
+        );
+    }
 
-  return {
-    case: c,
-    request
-  };
-}
+    if (!action) {
+        throw Object.assign(
+            new Error('Action is required.'),
+            { status: 400 }
+        );
+    }
 
-function getCase(userId, cid) {
-  const normalizedUserId = String(userId || '').trim();
-  const normalizedCaseId = normalizeCaseId(cid);
+    if (!VALID_ACTIONS.has(action)) {
+        throw Object.assign(
+            new Error(
+                `Invalid action. Allowed actions: ${[
+                    ...VALID_ACTIONS
+                ].join(', ')}.`
+            ),
+            { status: 400 }
+        );
+    }
 
-  if (!normalizedCaseId) {
-    throw Object.assign(
-      new Error('Case ID is required.'),
-      { status: 400 }
-    );
-  }
+    if (!reason) {
+        throw Object.assign(
+            new Error('Reason is required.'),
+            { status: 400 }
+        );
+    }
 
-  const c = repo.cases.get(normalizedCaseId);
+    if (reason.length > 1000) {
+        throw Object.assign(
+            new Error(
+                'Reason must not exceed 1000 characters.'
+            ),
+            { status: 400 }
+        );
+    }
 
-  if (!c || String(c.userId) !== normalizedUserId) {
-    console.warn('T-REX CASE LOOKUP FAILED:', {
-      requestedCaseId: normalizedCaseId,
-      authenticatedUserId: normalizedUserId,
-      repositoryCaseCount: repo.cases.size,
-      availableCaseIds: [...repo.cases.values()].map(item => item.caseId)
+    /* --------------------------------------------------------
+       Verify authenticated user
+       -------------------------------------------------------- */
+
+    const user =
+        await repo.findUserById(userId);
+
+    if (!user) {
+        throw Object.assign(
+            new Error('User not found.'),
+            { status: 404 }
+        );
+    }
+
+    /* --------------------------------------------------------
+       Create case
+       -------------------------------------------------------- */
+
+    const createdCase =
+        await repo.createCase({
+            caseId: repo.caseId(),
+            userId,
+            documentName,
+            action,
+            reason,
+            status: 'UNDER_VERIFICATION',
+            statusLabel: 'Under Verification',
+            timeline: buildTimeline()
+        });
+
+    /* --------------------------------------------------------
+       Create linked service request
+       -------------------------------------------------------- */
+
+    const request =
+        await repo.createRequest({
+            requestId: repo.randomId('req'),
+            caseId: createdCase.caseId,
+            userId,
+            service: documentName,
+            action,
+            status: 'UNDER_VERIFICATION',
+            statusLabel: 'Under Verification'
+        });
+
+    /* --------------------------------------------------------
+       Notification
+       -------------------------------------------------------- */
+
+    await repo.addNotification({
+        notificationId:
+            repo.randomId('ntf'),
+
+        userId,
+
+        type: 'request',
+
+        icon: '📋',
+
+        title: 'Protection Request Submitted',
+
+        message:
+            `${action} request for ${documentName} ` +
+            `has been submitted successfully. ` +
+            `Case ID: ${createdCase.caseId}`,
+
+        caseId: createdCase.caseId,
+
+        priority: 'normal',
+
+        read: false
     });
 
-    throw Object.assign(
-      new Error('Case not found.'),
-      { status: 404 }
-    );
-  }
+    /* --------------------------------------------------------
+       Audit log
+       -------------------------------------------------------- */
 
-  return c;
+    await repo.addAudit({
+        id: repo.randomId('audit'),
+
+        userId,
+
+        action: 'CASE_CREATED',
+
+        entityType: 'case',
+
+        entityId: createdCase.caseId,
+
+        metadata: {
+            service: documentName,
+            action
+        }
+    });
+
+    return {
+        case: createdCase,
+        request
+    };
 }
 
-function listCases(userId) {
-  const normalizedUserId = String(userId || '').trim();
+/* ============================================================
+   GET CASE
+   ============================================================ */
 
-  return [...repo.cases.values()]
-    .filter(c => String(c.userId) === normalizedUserId)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+async function getCase(userId, caseId) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
+    }
+
+    const requestedCase =
+        await repo.findCaseById(caseId);
+
+    if (
+        !requestedCase ||
+        requestedCase.userId !== userId
+    ) {
+        throw Object.assign(
+            new Error('Case not found.'),
+            { status: 404 }
+        );
+    }
+
+    return requestedCase;
 }
+
+/* ============================================================
+   LIST CASES
+   ============================================================ */
+
+async function listCases(userId) {
+    if (!userId) {
+        throw Object.assign(
+            new Error('Authenticated user is required.'),
+            { status: 401 }
+        );
+    }
+
+    return repo.listCasesByUser(userId);
+}
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
 
 module.exports = {
-  createCase,
-  getCase,
-  listCases
+    createCase,
+    getCase,
+    listCases
 };
