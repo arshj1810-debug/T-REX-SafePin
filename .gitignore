@@ -1,14 +1,18 @@
+
 # ==================================================
 # T-REX / SafePin
 # ==================================================
 
-# Environment variables / secrets
+# Environment variables and secrets
 .env
 .env.*
 !.env.example
 
-# Node.js
+# Node.js dependencies
 node_modules/
+**/node_modules/
+
+# Package manager logs
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
@@ -20,11 +24,11 @@ trex-backend/uploads/*
 # Logs
 *.log
 
-# OS files
+# Operating system files
 .DS_Store
 Thumbs.db
 
-# IDE
+# IDE settings
 .vscode/
 .idea/
 
@@ -32,12 +36,12 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Build / deployment output
+# Build and deployment output
 dist/
 build/
 .next/
 out/
+.vercel/
 
 # Local development files
 *.local
-.vercel

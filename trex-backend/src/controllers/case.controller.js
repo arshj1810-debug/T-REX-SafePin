@@ -70,11 +70,34 @@ async function get(req, res, next) {
 }
 
 /* ============================================================
+   UPDATE CASE STATUS
+   ============================================================ */
+
+async function updateStatus(req, res, next) {
+    try {
+        const result =
+            await service.updateCaseStatus(
+                req.user.sub,
+                req.params.caseId,
+                req.body
+            );
+
+        return res.json({
+            success: true,
+            ...result
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+/* ============================================================
    EXPORTS
    ============================================================ */
 
 module.exports = {
     create,
     list,
-    get
+    get,
+    updateStatus
 };

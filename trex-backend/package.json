@@ -1,8 +1,9 @@
+
 {
   "name": "trex-backend",
   "version": "1.0.0",
   "private": true,
-  "description": "T-REX / SafePin backend MVP - API layer without database dependency",
+  "description": "T-REX / SafePin backend with PostgreSQL support",
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",

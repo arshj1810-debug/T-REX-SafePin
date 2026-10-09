@@ -2,18 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "trex-backend/src/server.js",
+      "src": "trex-backend/src/app.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "trex-backend/src/server.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "trex-backend/src/server.js"
+      "dest": "trex-backend/src/app.js"
     }
   ]
 }

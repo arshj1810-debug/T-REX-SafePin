@@ -1044,6 +1044,55 @@ async function listRequestsByUser(
     );
 }
 
+async function updateRequest(
+    requestId,
+    data = {}
+) {
+    const existing =
+        await findRequestById(
+            requestId
+        );
+
+    if (!existing) {
+        throw Object.assign(
+            new Error(
+                'Service request not found.'
+            ),
+            { status: 404 }
+        );
+    }
+
+    const status =
+        data.status ||
+        existing.status;
+
+    const statusLabel =
+        data.statusLabel ||
+        existing.statusLabel;
+
+    const result =
+        await db.query(
+            `
+            UPDATE service_requests
+            SET
+                status = $2,
+                status_label = $3,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE request_id = $1
+            RETURNING *
+            `,
+            [
+                requestId,
+                status,
+                statusLabel
+            ]
+        );
+
+    return mapRequest(
+        result.rows[0]
+    );
+}
+
 /* ============================================================
    DOCUMENTS
    ============================================================ */
